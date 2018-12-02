@@ -37,7 +37,7 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // associate the layout manager and adapter to the recycler view
         mMovieGrid.setLayoutManager(mGridLayoutManager);
-        mMovieGrid.setAdapter(mAdapter); // TODO this adapter should be here!
+        mMovieGrid.setAdapter(mAdapter);
 
         // the images in the grid will all be the same size
         // explicitly identifying this to the OS allows for performance optimizations
@@ -113,4 +113,5 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         // removing all data from adapter automatically clears the UI listview
         mMovieGrid.setAdapter(null);
     }
+
 }
