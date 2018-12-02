@@ -35,5 +35,7 @@ public class GridActivity extends AppCompatActivity {
         // explicitly identifying this to the OS allows for performance optimzations
         mMovieGrid.hasFixedSize();
 
+        Utilities.createUrl("apples");
+
     }
 }

@@ -1,5 +1,6 @@
 package com.sommerengineering.popularmovies;
 
+import android.net.Uri;
 import android.util.Log;
 
 import java.net.MalformedURLException;
@@ -15,18 +16,40 @@ public final class Utilities {
     // constants
     private static final String THE_MOVIE_DATABASE_BASE_URL = "https://api.themoviedb.org/3/movie/550";
 
+    // query parameters
+    private static final String API_KEY = "api_key";
+    private static final String api_key = ""; // TODO put API key here
+    
 
     // returns URL object from a given string URL
-    public static URL createUrl(String stringUrl) {
+    public static URL createUrl(String sortOrder) {
 
-        // initialize returned object to null
+        // assemble the full query by compiling constituent parts
+        Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL);
+
+        // prepare URI for appending the query parameters
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        // append query parameters, for example "api_key=#"
+        uriBuilder.appendQueryParameter(API_KEY, api_key);
+        // TODO implement shared preference to retain user sort selection
+        //uriBuilder.appendQueryParameter(... sortOrder);
+
+        // convert URI to URL and return
+        String uriString = uriBuilder.toString();
+
+        // catch a malformed URL
         URL url = null;
         try {
-            url = new URL(stringUrl);
+            url = new URL(uriString);
         } catch (MalformedURLException e) {
-            Log.e(LOG_TAG, "Error creating URL: ", e);
+            e.printStackTrace();
         }
+
+        Log.e("~~~~~~~~~~~~~~~~~~~~ ", url.toString());
+
         return url;
+
     }
 
 
