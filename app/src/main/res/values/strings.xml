@@ -1,3 +1,10 @@
 <resources>
+
     <string name="app_name">Popular Movies</string>
+
+    <!-- empty states -->
+    <!-- &#8230; is an ellipse character "..." -->
+    <string name="no_movies_found">There are no movies from The Movie Database with the specified keywords &#8230; please restart the app to automatically refresh the results.</string>
+    <string name="no_internet_connection">There is no internet connection.\n\nTry (1) turning off airplane mode, (2) turning on mobile data or WiFi, (3) checking the signal in your area &#8230; then restart the app to automatically refresh the results.</string>
+
 </resources>
