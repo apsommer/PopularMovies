@@ -1,18 +1,20 @@
 package com.sommerengineering.popularmovies;
 
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
-import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
-public class GridActivity extends AppCompatActivity {
+public class GridActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<MovieObject>> {
 
     // constants
-    private static final int TOTAL_NUMBER_OF_MOVIES = 100;
+    private static final int TOTAL_NUMBER_OF_MOVIES = 20;
+    private static final int MOVIE_LOADER_ID = 0;
 
     // member variables
     private MovieAdapter mAdapter;
@@ -28,7 +30,11 @@ public class GridActivity extends AppCompatActivity {
 
         // set member variables
         mMovieGrid = findViewById(R.id.rv_recycler);
-        mAdapter = new MovieAdapter(TOTAL_NUMBER_OF_MOVIES);
+
+        ArrayList<MovieObject> movies = new ArrayList<>();
+        mAdapter = new MovieAdapter(this, TOTAL_NUMBER_OF_MOVIES, movies);
+
+
         mLayoutManager = new LinearLayoutManager(this); // TODO find best format for LayoutManager
 
         // associate the layout manager and adapter to the recycler view
@@ -39,16 +45,70 @@ public class GridActivity extends AppCompatActivity {
         // explicitly identifying this to the OS allows for performance optimzations
         mMovieGrid.hasFixedSize();
 
-            // TODO temp checks of utility methods
-            URL url = Utilities.createUrl("apples");
+        // TODO check internet connectivity first here ...
 
-            // perform HTTP request to the URL and receive a JSON response back
-            String responseJSON = null;
-            try {
-                responseJSON = Utilities.getResponseFromHttp(url);
-            } catch (IOException e) {
-                Log.e("~~~~~~~~~~~~~~~~", e.toString());
-            }
+        // initialize a loader manager to handle a background thread
+        LoaderManager loaderManager = getLoaderManager();
 
+        // automatically calls onCreateLoader()
+        loaderManager.initLoader(MOVIE_LOADER_ID, null, this);
+
+    }
+
+    // automatically called when the loader manager determines that a loader with an id of
+    // MOVIE_LOADER_ID does not exist
+    @Override
+    public Loader<ArrayList<MovieObject>> onCreateLoader(int id, Bundle args) {
+
+        // TODO load user preferences for sort by order and feed to Utilities.createUrl
+        URL url = Utilities.createUrl("arbitrary");
+        MovieLoader loader = new MovieLoader(this, url);
+        return loader;
+
+    }
+
+    // automatically called when loader background thread completes
+    @Override
+    public void onLoadFinished(Loader<ArrayList<MovieObject>> loader, ArrayList<MovieObject> movies) {
+
+        // clear the adapter of any previous query results
+        mAdapter.clear();
+
+        // TODO progress bar visibility
+
+        // check the input exists and is not empty
+        if (movies != null && !movies.isEmpty()) {
+
+            // calling addAll method on the adapter automatically triggers the RecylerView to update
+            mAdapter.addAll(movies);
+        }
+        else {
+
+//            // this conditional handles the rare edge case of (1) successful network call (2) populate ListView
+//            // (3) leave app (4) lose internet connection (5) return to app
+//            if (isConnected()) {
+//
+//                // the articles list is empty because there are no articles matching the search criteria
+//                mEmptyTextView.setText(R.string.no_articles_found);
+//
+//            }
+//
+//            // internet connection was lost after a loader with ARTICLE_LOADER_ID was successfully completed
+//            else {
+//
+//                // the articles list is empty because there is no internet connection
+//                mEmptyTextView.setText(R.string.no_internet_connection);
+//            }
+
+        }
+
+    }
+
+    // previously created loader is no longer needed and existing data should be discarded
+    @Override
+    public void onLoaderReset(Loader<ArrayList<MovieObject>> loader) {
+
+        // removing all data from adapter automatically clears the UI listview
+        mMovieGrid.setAdapter(null);
     }
 }

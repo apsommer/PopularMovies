@@ -6,16 +6,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     // total number of movie items in grid
     private int mNumberOfItems;
+    private ArrayList<MovieObject> mMovies;
+    private Context mContext;
 
-    public MovieAdapter(int numberOfItems) {
+    public MovieAdapter(Context context, int numberOfItems, ArrayList<MovieObject> movies) {
 
         // initialize member variables
+        mContext = context;
         mNumberOfItems = numberOfItems;
+        mMovies = movies;
 
     }
 
@@ -23,7 +30,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     class MovieViewHolder extends RecyclerView.ViewHolder {
 
         // image view for movie poster
-        private ImageView mMoviePoster;
+        private ImageView mPoster;
+        private TextView mTitle;
 
         // constructor
         public MovieViewHolder(View itemView) {
@@ -32,16 +40,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             super(itemView);
 
             // set member variables
-            mMoviePoster = itemView.findViewById(R.id.iv_poster);
+            mPoster = itemView.findViewById(R.id.iv_poster);
+            mTitle = itemView.findViewById(R.id.tv_title);
 
         }
 
         // called by the adapter
-        public void bind(int position) {
+        public void bind(String title) {
 
             // set the image view in grid_item
             // TODO set ImageView content to URL image for this movie based on item position
-            mMoviePoster.setImageResource(R.mipmap.ic_launcher);
+            mPoster.setImageResource(R.mipmap.ic_launcher);
+            mTitle.setText(title);
 
         }
 
@@ -70,7 +80,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void onBindViewHolder(MovieViewHolder holder, int position) {
 
         // call into holder class to update the poster image for this item
-        holder.bind(position);
+        if (mMovies != null && mMovies.size() > 0) {
+            MovieObject currentMovie = mMovies.get(position);
+            String title = currentMovie.getTitle();
+            holder.bind(title);
+        }
 
     }
+
+    public void clear() {
+
+        mMovies = null;
+    }
+
+    public void addAll(ArrayList<MovieObject> movies) {
+
+        mMovies = movies;
+
+    }
+
 }
