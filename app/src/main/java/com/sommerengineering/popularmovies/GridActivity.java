@@ -19,6 +19,8 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
     // member variables
     private MovieAdapter mAdapter;
     private RecyclerView mMovieGrid;
+    private ArrayList<MovieObject> mMovies;
+    private GridLayoutManager mGridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,18 +31,16 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // set member variables
         mMovieGrid = findViewById(R.id.rv_recycler);
-
-        ArrayList<MovieObject> movies = new ArrayList<>();
-        mAdapter = new MovieAdapter(this, TOTAL_NUMBER_OF_MOVIES, movies);
-
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        mMovies = new ArrayList<>();
+        mAdapter = new MovieAdapter(this, TOTAL_NUMBER_OF_MOVIES, mMovies);
+        mGridLayoutManager = new GridLayoutManager(this, 2);
 
         // associate the layout manager and adapter to the recycler view
-        mMovieGrid.setLayoutManager(gridLayoutManager);
-        mMovieGrid.setAdapter(mAdapter);
+        mMovieGrid.setLayoutManager(mGridLayoutManager);
+        mMovieGrid.setAdapter(mAdapter); // TODO this adapter should be here!
 
         // the images in the grid will all be the same size
-        // explicitly identifying this to the OS allows for performance optimzations
+        // explicitly identifying this to the OS allows for performance optimizations
         mMovieGrid.hasFixedSize();
 
         // TODO check internet connectivity first here ...
@@ -48,7 +48,7 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         // initialize a loader manager to handle a background thread
         LoaderManager loaderManager = getLoaderManager();
 
-        // automatically calls onCreateLoader()
+        // this initialization causes the OS to call onCreateLoader()
         loaderManager.initLoader(MOVIE_LOADER_ID, null, this);
 
     }
@@ -72,13 +72,17 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         // clear the adapter of any previous query results
         mAdapter.clear();
 
+        // associate the adapter with the recycler grid
+        //mMovieGrid.setAdapter(mAdapter);
+
         // TODO progress bar visibility
 
         // check the input exists and is not empty
         if (movies != null && !movies.isEmpty()) {
 
-            // calling addAll method on the adapter automatically triggers the RecylerView to update
+            // calling addAll method on the adapter triggers the recycler grid to update
             mAdapter.addAll(movies);
+            mAdapter.notifyDataSetChanged();
         }
         else {
 

@@ -97,6 +97,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     // update adapter
     public void addAll(ArrayList<MovieObject> movies) {
         mMovies = movies;
+
     }
 
 }
