@@ -3,8 +3,12 @@ package com.sommerengineering.popularmovies;
 import android.net.Uri;
 import android.util.Log;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Scanner;
 
 // final access modifier because no objects of this class will ever be created
 // holder for methods related to the network connection
@@ -19,7 +23,7 @@ public final class Utilities {
     // query parameters
     private static final String API_KEY = "api_key";
     private static final String api_key = ""; // TODO put API key here
-    
+
 
     // returns URL object from a given string URL
     public static URL createUrl(String sortOrder) {
@@ -52,5 +56,35 @@ public final class Utilities {
 
     }
 
+    // obtain JSON response string from API endpoint
+    public static String getResponseFromHttp(URL url) throws IOException {
+
+        // open the network connection
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+        try {
+
+            // create an input stream from the opened connection
+            InputStream inputStream = urlConnection.getInputStream();
+
+            // "\\A" delimiter denotes the end of server response
+            // therefore the entire response is read in one shot
+            Scanner scanner = new Scanner(inputStream);
+            scanner.useDelimiter("\\A");
+
+            // check if there is anything in the stream
+            boolean hasInput = scanner.hasNext();
+            if (hasInput) {
+                return scanner.next();
+            } else {
+                return null;
+            }
+
+        // close the connection
+        } finally {
+            urlConnection.disconnect();
+        }
+
+    }
 
 }

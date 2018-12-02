@@ -1,9 +1,13 @@
 package com.sommerengineering.popularmovies;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class GridActivity extends AppCompatActivity {
 
@@ -35,7 +39,16 @@ public class GridActivity extends AppCompatActivity {
         // explicitly identifying this to the OS allows for performance optimzations
         mMovieGrid.hasFixedSize();
 
-        Utilities.createUrl("apples");
+            // TODO temp checks of utility methods
+            URL url = Utilities.createUrl("apples");
+
+            // perform HTTP request to the URL and receive a JSON response back
+            String responseJSON = null;
+            try {
+                responseJSON = Utilities.getResponseFromHttp(url);
+            } catch (IOException e) {
+                Log.e("~~~~~~~~~~~~~~~~", e.toString());
+            }
 
     }
 }
