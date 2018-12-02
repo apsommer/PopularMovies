@@ -6,7 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         // image view for movie poster
         private ImageView mPoster;
-        private TextView mTitle;
 
         // constructor
         public MovieViewHolder(View itemView) {
@@ -41,17 +41,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
             // set member variables
             mPoster = itemView.findViewById(R.id.iv_poster);
-            mTitle = itemView.findViewById(R.id.tv_title);
 
         }
 
         // called by the adapter
-        public void bind(String title) {
+        public void bind(String posterPath) {
 
             // set the image view in grid_item
-            // TODO set ImageView content to URL image for this movie based on item position
-            mPoster.setImageResource(R.mipmap.ic_launcher);
-            mTitle.setText(title);
+            Picasso.with(mContext).load(posterPath).into(mPoster);
 
         }
 
@@ -79,24 +76,27 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
 
-        // call into holder class to update the poster image for this item
+        // check that movie objects actually exists
         if (mMovies != null && mMovies.size() > 0) {
+
+            // get current movie
             MovieObject currentMovie = mMovies.get(position);
-            String title = currentMovie.getTitle();
-            holder.bind(title);
+
+            // call into holder class to update the poster image for this item
+            String posterPath = currentMovie.getPosterPath();
+            holder.bind(posterPath);
         }
 
     }
 
+    // clear adapter
     public void clear() {
-
         mMovies = null;
     }
 
+    // update adapter
     public void addAll(ArrayList<MovieObject> movies) {
-
         mMovies = movies;
-
     }
 
 }

@@ -29,8 +29,8 @@ public final class Utilities {
 
     // query parameters
     private static final String API_KEY = "api_key";
-    private static final String api_key = "ae7b929b7942ee2ffc3c8c7d1a7af8cf"; // TODO put API key here
-    //http://api.themoviedb.org/3/movie/popular?api_key=ae7b929b7942ee2ffc3c8c7d1a7af8cf
+    private static final String api_key = ""; // TODO put API key here
+
 
     public static ArrayList<MovieObject> getMovieData(String sortOrder) {
 
