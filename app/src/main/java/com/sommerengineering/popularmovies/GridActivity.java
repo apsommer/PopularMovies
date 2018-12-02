@@ -4,7 +4,7 @@ import android.app.LoaderManager;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.net.URL;
@@ -19,7 +19,6 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
     // member variables
     private MovieAdapter mAdapter;
     private RecyclerView mMovieGrid;
-    private LinearLayoutManager mLayoutManager; // TODO find best format for LayoutManager
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +33,10 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         ArrayList<MovieObject> movies = new ArrayList<>();
         mAdapter = new MovieAdapter(this, TOTAL_NUMBER_OF_MOVIES, movies);
 
-
-        mLayoutManager = new LinearLayoutManager(this); // TODO find best format for LayoutManager
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
 
         // associate the layout manager and adapter to the recycler view
-        mMovieGrid.setLayoutManager(mLayoutManager);
+        mMovieGrid.setLayoutManager(gridLayoutManager);
         mMovieGrid.setAdapter(mAdapter);
 
         // the images in the grid will all be the same size
