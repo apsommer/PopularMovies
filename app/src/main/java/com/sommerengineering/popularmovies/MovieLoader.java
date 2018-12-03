@@ -38,7 +38,7 @@ public class MovieLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
         }
 
         // perform the HTTP request for movie data and process the JSON response
-        ArrayList<MovieObject> movies = Utilities.getMovieData("arbitrary");
+        ArrayList<MovieObject> movies = Utilities.getMovieData("popular");
         return movies;
     }
 }

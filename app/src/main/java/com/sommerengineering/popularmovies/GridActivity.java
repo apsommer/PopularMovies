@@ -4,9 +4,11 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -112,8 +114,16 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<ArrayList<MovieObject>> onCreateLoader(int id, Bundle args) {
 
-        // TODO load user preferences for sort by order and feed to Utilities.createUrl
-        URL url = Utilities.createUrl("arbitrary");
+        // get the hardcoded default preferences
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // retrieve user preference for order-by
+        // a reference to the default preference is required by getString
+        String orderByKey = getString(R.string.settings_order_by_key);
+        String orderByDefaultValue = getString(R.string.settings_order_by_default);
+        String orderBy = sharedPrefs.getString(orderByKey, orderByDefaultValue);
+
+        URL url = Utilities.createUrl(orderBy);
         MovieLoader loader = new MovieLoader(this, url);
         return loader;
 

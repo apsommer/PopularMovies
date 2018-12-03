@@ -22,6 +22,7 @@
 
     <!-- Label for order-by "rating" option [CHAR LIMIT=20] -->
     <string name="settings_order_by_rating_label">Rating</string>
-    <string name="settings_order_by_rating_value" translatable="false">rating</string>
+    <string name="settings_order_by_rating_value" translatable="false">top_rated</string>
+    <string name="temp">apples</string>
 
 </resources>

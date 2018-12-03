@@ -23,7 +23,9 @@ public final class Utilities {
     private static final String LOG_TAG = Utilities.class.getSimpleName();
 
     // constants
-    private static final String THE_MOVIE_DATABASE_BASE_URL = "http://api.themoviedb.org/3/movie/popular";
+    private static final String THE_MOVIE_DATABASE_BASE_URL = "http://api.themoviedb.org/3/movie/";
+//    private static final String SORT_ORDER_POPULAR = "popular";
+//    private static final String SORT_ORDER_RATING = "top_rated";
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_SIZE = "w342/";
 
@@ -32,10 +34,10 @@ public final class Utilities {
     private static final String api_key = "ae7b929b7942ee2ffc3c8c7d1a7af8cf";
     //http://api.themoviedb.org/3/movie/popular?api_key=ae7b929b7942ee2ffc3c8c7d1a7af8cf
 
-    public static ArrayList<MovieObject> getMovieData(String sortOrder) {
+    public static ArrayList<MovieObject> getMovieData(String orderBy) {
 
         // convert url string input to URL
-        URL url = createUrl("apples");
+        URL url = createUrl(orderBy);
 
         // perform HTTP request to the URL and receive a JSON response back
         String responseJSON = null;
@@ -51,18 +53,16 @@ public final class Utilities {
     }
 
     // create a URL with the given user preference for sort order
-    public static URL createUrl(String sortOrder) {
+    public static URL createUrl(String orderBy) {
 
         // assemble the full query by compiling constituent parts
-        Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL);
+        Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL + orderBy);
 
         // prepare URI for appending the query parameters
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         // append query parameters, for example "api_key=#"
         uriBuilder.appendQueryParameter(API_KEY, api_key);
-        // TODO implement shared preference to retain user sort order selection
-        //uriBuilder.appendQueryParameter(... sortOrder);
 
         // convert URI to URL and return
         String uriString = uriBuilder.toString();
