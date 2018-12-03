@@ -34,10 +34,10 @@ public final class Utilities {
     private static final String api_key = "ae7b929b7942ee2ffc3c8c7d1a7af8cf";
     //http://api.themoviedb.org/3/movie/popular?api_key=ae7b929b7942ee2ffc3c8c7d1a7af8cf
 
-    public static ArrayList<MovieObject> getMovieData(String orderBy) {
+    public static ArrayList<MovieObject> getMovieData(URL url) {
 
         // convert url string input to URL
-        URL url = createUrl(orderBy);
+        //URL url = createUrl(orderBy);
 
         // perform HTTP request to the URL and receive a JSON response back
         String responseJSON = null;

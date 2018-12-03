@@ -42,6 +42,23 @@ public class SettingsActivity extends AppCompatActivity {
 
         }
 
+        // set a listener on this app level preference and update
+        private void bindPreferenceSummaryToValue(Preference preference) {
+
+            // set listener on the preference
+            preference.setOnPreferenceChangeListener(this);
+
+            // get reference to the devices's shared preferences
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
+
+            // get the String key for the preference
+            String preferenceKey = sharedPreferences.getString(preference.getKey(), "");
+
+            // update preferences with the values chosen by the user
+            onPreferenceChange(preference, preferenceKey);
+
+        }
+
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
 
@@ -65,23 +82,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
 
             return true;
-
-        }
-
-        // set a listener on this app level preference and updat
-        private void bindPreferenceSummaryToValue(Preference preference) {
-
-            // set listener on the preference
-            preference.setOnPreferenceChangeListener(this);
-
-            // get reference to the devices's shared preferences
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
-
-            // get the String key for the preference
-            String preferenceKey = sharedPreferences.getString(preference.getKey(), "");
-
-            // update preferences with the values chosen by the user
-            onPreferenceChange(preference, preferenceKey);
 
         }
 

@@ -20,6 +20,7 @@ public class MovieLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
 
         // this loader has only one designated URL address
         mUrl = url;
+
     }
 
     @Override
@@ -38,7 +39,7 @@ public class MovieLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
         }
 
         // perform the HTTP request for movie data and process the JSON response
-        ArrayList<MovieObject> movies = Utilities.getMovieData("popular");
+        ArrayList<MovieObject> movies = Utilities.getMovieData(mUrl);
         return movies;
     }
 }
