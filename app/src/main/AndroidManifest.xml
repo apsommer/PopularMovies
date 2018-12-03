@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.sommerengineering.popularmovies">
 
-    <!-- "normal" level protections automatically granted -->
+    <!-- "normal" level protections are automatically granted -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -14,7 +14,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning" >
+        tools:ignore="GoogleAppIndexingWarning"
+        android:fullBackupContent="@xml/backup_descriptor">
 
         <!-- a recycler grid is the main activity -->
         <activity

@@ -2,11 +2,9 @@ package com.sommerengineering.popularmovies;
 
 import android.net.Uri;
 import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -17,27 +15,21 @@ import java.util.Scanner;
 
 // final access modifier because no objects of this class will ever be created
 // holder for methods related to the network connection
-public final class Utilities {
+final class Utilities {
 
     // simple tag for log messages
     private static final String LOG_TAG = Utilities.class.getSimpleName();
 
     // constants
     private static final String THE_MOVIE_DATABASE_BASE_URL = "http://api.themoviedb.org/3/movie/";
-//    private static final String SORT_ORDER_POPULAR = "popular";
-//    private static final String SORT_ORDER_RATING = "top_rated";
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_SIZE = "w342/";
 
     // query parameters
     private static final String API_KEY = "api_key";
-    private static final String api_key = "ae7b929b7942ee2ffc3c8c7d1a7af8cf";
-    //http://api.themoviedb.org/3/movie/popular?api_key=ae7b929b7942ee2ffc3c8c7d1a7af8cf
+    private static final String api_key = "ae7b929b7942ee2ffc3c8c7d1a7af8cf"; // TODO add API key here
 
-    public static ArrayList<MovieObject> getMovieData(URL url) {
-
-        // convert url string input to URL
-        //URL url = createUrl(orderBy);
+    static ArrayList<MovieObject> getMovieData(URL url) {
 
         // perform HTTP request to the URL and receive a JSON response back
         String responseJSON = null;
@@ -47,13 +39,12 @@ public final class Utilities {
             Log.e("~~~~~~~~~~~~~~~~", e.toString());
         }
 
-        ArrayList<MovieObject> movies = extractMoviesFromJSON(responseJSON);
-        return movies;
+        return extractMoviesFromJSON(responseJSON);
 
     }
 
     // create a URL with the given user preference for sort order
-    public static URL createUrl(String orderBy) {
+    static URL createUrl(String orderBy) {
 
         // assemble the full query by compiling constituent parts
         Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL + orderBy);
@@ -75,7 +66,7 @@ public final class Utilities {
             e.printStackTrace();
         }
 
-        Log.e("~~~~~~~~~~~~~~~~~~~~ ", url.toString());
+        Log.e("~~~~~~~~~~~~~~~~~~~~ ", String.valueOf(url));
 
         return url;
 
@@ -112,7 +103,7 @@ public final class Utilities {
 
     }
 
-    //
+    // convert JSON payload to a list of custom movie objects
     private static ArrayList<MovieObject> extractMoviesFromJSON(String JSONresponse) {
 
         // initialize an empty ArrayList

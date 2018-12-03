@@ -30,8 +30,6 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
     // member variables
     private MovieAdapter mAdapter;
     private RecyclerView mMovieGrid;
-    private ArrayList<MovieObject> mMovies;
-    private GridLayoutManager mGridLayoutManager;
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
 
@@ -44,14 +42,14 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // set member variables
         mMovieGrid = findViewById(R.id.rv_recycler);
-        mMovies = new ArrayList<>();
-        mAdapter = new MovieAdapter(this, TOTAL_NUMBER_OF_MOVIES, mMovies, this);
-        mGridLayoutManager = new GridLayoutManager(this, 2);
+        ArrayList<MovieObject> movies = new ArrayList<>();
+        mAdapter = new MovieAdapter(this, TOTAL_NUMBER_OF_MOVIES, movies, this);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         mProgressBar = findViewById(R.id.pb_progress);
         mErrorTextView = findViewById(R.id.tv_error);
 
         // associate the layout manager and adapter to the recycler view
-        mMovieGrid.setLayoutManager(mGridLayoutManager);
+        mMovieGrid.setLayoutManager(gridLayoutManager);
         mMovieGrid.setAdapter(mAdapter);
 
 
@@ -140,8 +138,7 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         String orderBy = sharedPrefs.getString(orderByKey, orderByDefaultValue);
 
         URL url = Utilities.createUrl(orderBy);
-        MovieLoader loader = new MovieLoader(this, url);
-        return loader;
+        return new MovieLoader(this, url);
 
     }
 
@@ -194,7 +191,7 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     // check status of internet connectivity
-    public boolean isConnected() {
+    private boolean isConnected() {
 
         // get internet connectivity status as a boolean
         ConnectivityManager connectivityManager =
@@ -205,10 +202,7 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
 
         // boolean representing internet is connected, or in progress connecting
-        boolean isConnected =
-            (activeNetwork != null) && activeNetwork.isConnectedOrConnecting();
-
-        return isConnected;
+        return (activeNetwork != null) && activeNetwork.isConnectedOrConnecting();
 
     }
 

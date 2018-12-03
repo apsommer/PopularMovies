@@ -13,15 +13,9 @@ import com.squareup.picasso.Picasso;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
-
-    private TextView mTitleTV;
-    private TextView mPlotTV;
-    private TextView mDateTV;
-    private ImageView mThumbnailIV;
-    private RatingBar mRatingRB;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +27,11 @@ public class DetailActivity extends AppCompatActivity {
         MovieObject movie = (MovieObject) intent.getSerializableExtra("selectedMovie");
 
         // get references
-        mTitleTV = findViewById(R.id.tv_title);
-        mPlotTV = findViewById(R.id.tv_plot);
-        mDateTV = findViewById(R.id.tv_date);
-        mThumbnailIV = findViewById(R.id.iv_thumbnail);
-        mRatingRB = findViewById(R.id.rb_stars);
+        TextView mTitleTV = findViewById(R.id.tv_title);
+        TextView mPlotTV = findViewById(R.id.tv_plot);
+        TextView mDateTV = findViewById(R.id.tv_date);
+        ImageView mThumbnailIV = findViewById(R.id.iv_thumbnail);
+        RatingBar mRatingRB = findViewById(R.id.rb_stars);
 
         // set content
         mTitleTV.setText(movie.getTitle());
@@ -53,17 +47,16 @@ public class DetailActivity extends AppCompatActivity {
 
         // expected datetime format
         String expectedPattern = "yyyy-MM-dd";
-        SimpleDateFormat expectedFormatter = new SimpleDateFormat(expectedPattern);
+        SimpleDateFormat expectedFormatter = new SimpleDateFormat(expectedPattern, Locale.getDefault());
 
         // change to simpler date only
         String targetPattern = "MMMM d, yyyy";
-        SimpleDateFormat targetFormatter = new SimpleDateFormat(targetPattern);
+        SimpleDateFormat targetFormatter = new SimpleDateFormat(targetPattern, Locale.getDefault());
 
         // unexpected timestamp format will cause parsing error
         try {
             Date date = expectedFormatter.parse(timestamp);
-            String simpleDate= targetFormatter.format(date);
-            return simpleDate;
+            return targetFormatter.format(date);
         }
         catch (ParseException e) {
             Log.e("~~~~~~~~~~~~~~~~~~~", "Error formatting timestamp.", e);

@@ -3,17 +3,17 @@ package com.sommerengineering.popularmovies;
 import java.io.Serializable;
 
 // custom movie object holds metadata for a specific movie
-public class MovieObject implements Serializable {
+class MovieObject implements Serializable {
 
     // attributes
-    private String mTitle; // title
-    private String mPosterPath; // URL to poster image
-    private String mPlot; // short synopsis of plot
-    private double mRating; // aggregated rating between 1-10
-    private String mDate; // release date
+    private final String mTitle; // title
+    private final String mPosterPath; // URL to poster image
+    private final String mPlot; // short synopsis of plot
+    private final double mRating; // aggregated rating between 1-10
+    private final String mDate; // release date
 
     // constructor
-    public MovieObject(String title, String posterPath, String plot, double rating, String date) {
+    MovieObject(String title, String posterPath, String plot, double rating, String date) {
 
         mTitle = title;
         mPosterPath = posterPath;
@@ -24,19 +24,19 @@ public class MovieObject implements Serializable {
     }
 
     // getters
-    public String getTitle() {
+    String getTitle() {
         return mTitle;
     }
-    public String getPosterPath() {
+    String getPosterPath() {
         return mPosterPath;
     }
-    public String getPlot() {
+    String getPlot() {
         return mPlot;
     }
-    public double getRating() {
+    double getRating() {
         return mRating;
     }
-    public String getDate() {
+    String getDate() {
         return mDate;
     }
 

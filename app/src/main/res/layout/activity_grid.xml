@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<merge
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/grid_spacing"
-    >
+    android:layout_margin="@dimen/grid_spacing" >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:clipToPadding="false" />
 
     <TextView
         android:id="@+id/tv_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        tools:text="Error text ... retrieving movies, please check internet connection."
-        android:textSize="20sp"
+        android:padding="@dimen/empty_state_spacing"
+        android:text="@string/no_movies_found"
+        android:textSize="@dimen/empty_state_text_size"
         android:visibility="invisible"
-        android:layout_gravity="center"
-        />
+        android:layout_gravity="center" />
 
     <ProgressBar
         android:id="@+id/pb_progress"
-        android:layout_height="42dp"
-        android:layout_width="42dp"
-        android:layout_gravity="center" />
+        android:layout_height="@dimen/progress_bar_size"
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
 
-</FrameLayout>
+</merge>

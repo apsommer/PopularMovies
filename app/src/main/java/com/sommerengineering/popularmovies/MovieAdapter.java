@@ -14,9 +14,9 @@ import java.util.ArrayList;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     // total number of movie items in grid
-    private int mNumberOfItems;
+    private final int mNumberOfItems;
     private ArrayList<MovieObject> mMovies;
-    private Context mContext;
+    private final Context mContext;
     private final MovieAdapterOnClickHandler mClickHandler;
 
     // constructor
@@ -41,10 +41,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // image view for movie poster
-        private ImageView mPoster;
+        private final ImageView mPoster;
 
         // constructor
-        public MovieViewHolder(View itemView) {
+        MovieViewHolder(View itemView) {
 
             // super class initializes the holder
             super(itemView);
@@ -57,11 +57,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         }
 
-        //
+        // click event on this item view
         @Override
         public void onClick(View v) {
 
-            //
+            // get the clicked movie and pass to the custom handler
             int position = getAdapterPosition();
             MovieObject movie = mMovies.get(position);
             mClickHandler.onRecyclerItemClick(movie);
@@ -69,7 +69,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
 
         // called by the adapter
-        public void bind(String posterPath) {
+        void bind(String posterPath) {
 
             // set the image view in grid_item
             Picasso.with(mContext).load(posterPath).into(mPoster);
@@ -92,9 +92,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         View itemView = inflater.inflate(R.layout.grid_item, viewGroup, false);
 
         // pass the inflated layout to the holder constructor
-        MovieViewHolder movieViewHolder = new MovieViewHolder(itemView);
+        return new MovieViewHolder(itemView);
 
-        return movieViewHolder;
     }
 
     @Override
