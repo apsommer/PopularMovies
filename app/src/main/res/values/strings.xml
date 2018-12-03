@@ -26,5 +26,6 @@
 
     <!-- miscellaneous -->
     <string name="content_description_for_poster_image">Movie poster image</string>
+    <string name="activity_grid_toolbar_title">TMDb</string>
 
 </resources>

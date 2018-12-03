@@ -40,6 +40,13 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
 
+        // TODO custom action bar
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.activity_grid_toolbar_title);
+        setSupportActionBar(toolbar);
+
+
+
         // set member variables
         mMovieGrid = findViewById(R.id.rv_recycler);
         ArrayList<MovieObject> movies = new ArrayList<>();
@@ -51,7 +58,6 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         // associate the layout manager and adapter to the recycler view
         mMovieGrid.setLayoutManager(gridLayoutManager);
         mMovieGrid.setAdapter(mAdapter);
-
 
         // the images in the grid will all be the same size
         // explicitly identifying this to the OS allows for performance optimizations
