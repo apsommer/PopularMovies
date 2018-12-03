@@ -1,7 +1,9 @@
 package com.sommerengineering.popularmovies;
 
+import java.io.Serializable;
+
 // custom movie object holds metadata for a specific movie
-public class MovieObject {
+public class MovieObject implements Serializable {
 
     // attributes
     private String mTitle; // title

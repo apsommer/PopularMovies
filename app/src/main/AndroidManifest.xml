@@ -2,7 +2,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.sommerengineering.popularmovies" >
+    package="com.sommerengineering.popularmovies">
 
     <!-- "normal" level protections automatically granted -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,26 +16,44 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning" >
 
+        <!-- a recycler grid is the main activity -->
         <activity
             android:name=".GridActivity" >
 
             <intent-filter>
 
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action
+                    android:name="android.intent.action.MAIN" />
+
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
 
             </intent-filter>
 
         </activity>
 
+        <!-- overflow menu is a settings fragment -->
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings_title" >
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sommerengineering.popularmovies.GridActivity" />
+
         </activity>
 
+        <!-- detailed activity shows all movie metadata -->
+        <activity
+            android:name=".DetailActivity"
+            android:label="Movie Details" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sommerengineering.popularmovies.GridActivity" />
+
+        </activity>
+        
     </application>
 
 </manifest>

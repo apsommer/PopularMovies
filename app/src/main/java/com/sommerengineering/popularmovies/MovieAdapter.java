@@ -17,18 +17,28 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private int mNumberOfItems;
     private ArrayList<MovieObject> mMovies;
     private Context mContext;
+    private final MovieAdapterOnClickHandler mClickHandler;
 
-    public MovieAdapter(Context context, int numberOfItems, ArrayList<MovieObject> movies) {
+    // constructor
+    public MovieAdapter(Context context, int numberOfItems, ArrayList<MovieObject> movies, MovieAdapterOnClickHandler clickHandler) {
 
         // initialize member variables
         mContext = context;
         mNumberOfItems = numberOfItems;
         mMovies = movies;
+        mClickHandler = clickHandler;
 
     }
 
+    // a single handler is called on the click event of a single recycler grid item
+    public interface MovieAdapterOnClickHandler {
+
+        // only one method required to override
+        void onRecyclerItemClick(MovieObject movie);
+    }
+
     // critical component of recycler view that allows view caching (memory optimization)
-    class MovieViewHolder extends RecyclerView.ViewHolder {
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // image view for movie poster
         private ImageView mPoster;
@@ -41,6 +51,20 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
             // set member variables
             mPoster = itemView.findViewById(R.id.iv_poster);
+
+            // set click listener on view
+            itemView.setOnClickListener(this);
+
+        }
+
+        //
+        @Override
+        public void onClick(View v) {
+
+            //
+            int position = getAdapterPosition();
+            MovieObject movie = mMovies.get(position);
+            mClickHandler.onRecyclerItemClick(movie);
 
         }
 

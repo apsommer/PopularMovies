@@ -21,7 +21,7 @@ import android.widget.TextView;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class GridActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<MovieObject>> {
+public class GridActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<MovieObject>>, MovieAdapter.MovieAdapterOnClickHandler {
 
     // constants
     private static final int TOTAL_NUMBER_OF_MOVIES = 20;
@@ -45,7 +45,7 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         // set member variables
         mMovieGrid = findViewById(R.id.rv_recycler);
         mMovies = new ArrayList<>();
-        mAdapter = new MovieAdapter(this, TOTAL_NUMBER_OF_MOVIES, mMovies);
+        mAdapter = new MovieAdapter(this, TOTAL_NUMBER_OF_MOVIES, mMovies, this);
         mGridLayoutManager = new GridLayoutManager(this, 2);
         mProgressBar = findViewById(R.id.pb_progress);
         mErrorTextView = findViewById(R.id.tv_error);
@@ -53,6 +53,7 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         // associate the layout manager and adapter to the recycler view
         mMovieGrid.setLayoutManager(mGridLayoutManager);
         mMovieGrid.setAdapter(mAdapter);
+
 
         // the images in the grid will all be the same size
         // explicitly identifying this to the OS allows for performance optimizations
@@ -74,9 +75,24 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
             mProgressBar.setVisibility(View.GONE);
 
             // the articles list is empty
+            mErrorTextView.setVisibility(View.VISIBLE);
             mErrorTextView.setText(R.string.no_internet_connection);
 
         }
+
+    }
+
+    @Override
+    public void onRecyclerItemClick(MovieObject movie) {
+
+        // explicit intent for detail activity
+        Intent intentToStartDetailActivity = new Intent(this, DetailActivity.class);
+
+        // add the selected movie to the intent
+        intentToStartDetailActivity.putExtra("selectedMovie", movie);
+
+        // start new detail activity
+        startActivity(intentToStartDetailActivity);
 
     }
 
