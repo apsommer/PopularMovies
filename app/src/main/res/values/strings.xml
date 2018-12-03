@@ -3,8 +3,25 @@
     <string name="app_name">Popular Movies</string>
 
     <!-- empty states -->
-    <!-- &#8230; is an ellipse character "..." -->
+    <!-- "&#8230;" is the ellipse character equivalent to three dots "..." -->
     <string name="no_movies_found">There are no movies from The Movie Database with the specified keywords &#8230; please restart the app to automatically refresh the results.</string>
     <string name="no_internet_connection">There is no internet connection.\n\nTry (1) turning off airplane mode, (2) turning on mobile data or WiFi, (3) checking the signal in your area &#8230; then restart the app to automatically refresh the results.</string>
+
+    <!-- settings menu -->
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">Settings</string>
+
+    <!-- Preference "order by" [CHAR LIMIT=30] -->
+    <string name="settings_order_by_label">Order By</string>
+    <string name="settings_order_by_key" translatable="false">order_by</string>
+    <string name="settings_order_by_default" translatable="false">@string/settings_order_by_popular_value</string>
+
+    <!-- Label for order-by "popular" option [CHAR LIMIT=20] -->
+    <string name="settings_order_by_popular_label">Popular</string>
+    <string name="settings_order_by_popular_value" translatable="false">popular</string>
+
+    <!-- Label for order-by "rating" option [CHAR LIMIT=20] -->
+    <string name="settings_order_by_rating_label">Rating</string>
+    <string name="settings_order_by_rating_value" translatable="false">rating</string>
 
 </resources>

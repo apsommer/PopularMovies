@@ -2,6 +2,7 @@ package com.sommerengineering.popularmovies;
 
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -73,6 +76,35 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
 
         }
 
+    }
+
+    // initialize overflow menu in top right of Action Bar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // inflate menu
+        getMenuInflater().inflate(R.menu.menu_overflow, menu);
+        return true;
+    }
+
+    // called when the settings menu is clicked
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // get id of menu item
+        int id = item.getItemId();
+
+        // ic_sort icon in top-right of action bar is pressed
+        if (id == R.id.action_settings) {
+
+            // explicit Intent to start new SettingsActivity
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+
+        // call through to base class to perform the default menu handling
+        return super.onOptionsItemSelected(item);
     }
 
     // automatically called when the loader manager determines that a loader with an id of
