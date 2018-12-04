@@ -27,7 +27,7 @@ final class Utilities {
 
     // query parameters
     private static final String API_KEY = "api_key";
-    private static final String api_key = "ae7b929b7942ee2ffc3c8c7d1a7af8cf"; // TODO add API key here
+    private static final String api_key = "ae7b92..."; // TODO add API key here
 
     static ArrayList<MovieObject> getMovieData(URL url) {
 

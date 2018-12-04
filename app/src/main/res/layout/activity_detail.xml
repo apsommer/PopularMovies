@@ -14,8 +14,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/adamina"
-            android:layout_margin="@dimen/detail_view_spacing"
-            android:textSize="@dimen/detail_view_title_size"
+            android:layout_margin="@dimen/detail_spacing"
+            android:textSize="@dimen/detail_title_size"
             android:textColor="@color/color_black"
             android:textStyle="bold"
             tools:text="Original title" />
@@ -30,7 +30,7 @@
             android:layout_gravity="center"
             style="?android:attr/ratingBarStyleSmall"
             tools:rating="6.4"
-            android:layout_margin="@dimen/detail_view_spacing" />
+            android:layout_margin="@dimen/detail_spacing" />
 
         <ImageView
             android:id="@+id/iv_thumbnail"
@@ -40,6 +40,7 @@
             tools:src="@mipmap/ic_launcher"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
+            android:layout_marginBottom="@dimen/detail_extra_spacing"
             android:contentDescription="@string/content_description_for_poster_image" />
 
         <TextView
@@ -50,7 +51,7 @@
             android:textColor="@color/color_black"
             android:fontFamily="@font/adamina"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/detail_view_spacing"
+            android:layout_margin="@dimen/detail_spacing"
             tools:text="December 2, 2018" />
 
         <TextView
@@ -59,7 +60,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_date"
             android:fontFamily="@font/adamina"
-            android:layout_margin="@dimen/detail_view_spacing"
+            android:layout_marginTop="@dimen/detail_extra_spacing"
+            android:layout_marginBottom="@dimen/detail_extra_spacing"
+            android:layout_marginLeft="@dimen/detail_spacing"
+            android:layout_marginRight="@dimen/detail_spacing"
             android:textColor="@color/color_black"
             tools:text="Plot synopsis" />
 
