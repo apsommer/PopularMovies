@@ -18,6 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         // layout has a single <fragment> tag
         setContentView(R.layout.activity_settings);
+
     }
 
     public static class MoviePreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {

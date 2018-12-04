@@ -40,12 +40,10 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
 
-        // TODO custom action bar
+        // custom toolbar
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.activity_grid_toolbar_title);
         setSupportActionBar(toolbar);
-
-
 
         // set member variables
         mMovieGrid = findViewById(R.id.rv_recycler);

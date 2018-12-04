@@ -40,6 +40,7 @@
             tools:src="@mipmap/ic_launcher"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
+            android:layout_marginBottom="32dp"
             android:contentDescription="@string/content_description_for_poster_image" />
 
         <TextView
@@ -59,8 +60,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_date"
             android:fontFamily="@font/adamina"
-            android:layout_margin="@dimen/detail_view_spacing"
             android:textColor="@color/color_black"
+            android:layout_marginLeft="@dimen/detail_view_spacing"
+            android:layout_marginRight="@dimen/detail_view_spacing"
+            android:layout_marginTop="@dimen/extra_plot_text_spacing"
+            android:layout_marginBottom="16dp"
             tools:text="Plot synopsis" />
 
     </RelativeLayout>
