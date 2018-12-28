@@ -1,6 +1,8 @@
 package com.sommerengineering.popularmovies;
 
+import android.content.Context;
 import android.net.Uri;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -149,6 +151,20 @@ final class Utilities {
 
         return movies;
 
+    }
+
+    //
+    public static int calculateNumberOfColumns(Context context) {
+
+        // get the device screen dimensions
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+
+        // device width in dp
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+
+        // number of columns
+        int noOfColumns = (int) (dpWidth / 180);
+        return noOfColumns;
     }
 
 }

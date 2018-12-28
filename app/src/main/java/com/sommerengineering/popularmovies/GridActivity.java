@@ -21,7 +21,9 @@ import android.widget.TextView;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class GridActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<MovieObject>>, MovieAdapter.MovieAdapterOnClickHandler {
+public class GridActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<ArrayList<MovieObject>>,
+        MovieAdapter.MovieAdapterOnClickHandler {
 
     // constants
     private static final int TOTAL_NUMBER_OF_MOVIES = 20;
@@ -32,6 +34,7 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
     private RecyclerView mMovieGrid;
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +43,22 @@ public class GridActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
 
-        // set member variables
+        // get a reference for the top level context
+        mContext = getApplicationContext();
+
+        // setup the recycler view and adapter
         mMovieGrid = findViewById(R.id.rv_recycler);
         ArrayList<MovieObject> movies = new ArrayList<>();
         mAdapter = new MovieAdapter(this, TOTAL_NUMBER_OF_MOVIES, movies, this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, Utilities.calculateNumberOfColumns(mContext));
+
+        // setup the indicator widgets
         mProgressBar = findViewById(R.id.pb_progress);
         mErrorTextView = findViewById(R.id.tv_error);
 
         // associate the layout manager and adapter to the recycler view
         mMovieGrid.setLayoutManager(gridLayoutManager);
         mMovieGrid.setAdapter(mAdapter);
-
 
         // the images in the grid will all be the same size
         // explicitly identifying this to the OS allows for performance optimizations
