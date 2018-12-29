@@ -5,6 +5,7 @@
     android:id="@+id/iv_poster"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:scaleType="fitXY"
     android:adjustViewBounds="true"
     tools:src="@mipmap/ic_launcher"
     android:layout_margin="@dimen/grid_spacing"
