@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
+public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 
     // total number of movie items in grid
     private final int mNumberOfItems;
@@ -20,7 +20,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private final MovieAdapterOnClickHandler mClickHandler;
 
     // constructor
-    public MovieAdapter(Context context, int numberOfItems, ArrayList<MovieObject> movies, MovieAdapterOnClickHandler clickHandler) {
+    public MoviesAdapter(Context context, int numberOfItems, ArrayList<MovieObject> movies, MovieAdapterOnClickHandler clickHandler) {
 
         // initialize member variables
         mContext = context;

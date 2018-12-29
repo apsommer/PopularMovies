@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,14 +23,14 @@ import java.util.ArrayList;
 
 public class GridActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<MovieObject>>,
-        MovieAdapter.MovieAdapterOnClickHandler {
+        MoviesAdapter.MovieAdapterOnClickHandler {
 
     // constants
     private static final int TOTAL_NUMBER_OF_MOVIES = 20;
     private static final int GRID_MOVIE_LOADER_ID = 0;
 
     // member variables
-    private MovieAdapter mAdapter;
+    private MoviesAdapter mAdapter;
     private RecyclerView mMovieGrid;
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
@@ -51,7 +50,7 @@ public class GridActivity extends AppCompatActivity implements
         // setup the recycler view and adapter
         mMovieGrid = findViewById(R.id.rv_recycler);
         ArrayList<MovieObject> movies = new ArrayList<>();
-        mAdapter = new MovieAdapter(this, TOTAL_NUMBER_OF_MOVIES, movies, this);
+        mAdapter = new MoviesAdapter(this, TOTAL_NUMBER_OF_MOVIES, movies, this);
 
         // get references to the indicator widgets
         mProgressBar = findViewById(R.id.pb_progress);
@@ -150,10 +149,10 @@ public class GridActivity extends AppCompatActivity implements
         String orderBy = sharedPrefs.getString(orderByKey, orderByDefaultValue);
 
         // build the URL based on user preference for sort order
-        URL url = Utilities.createUrl(orderBy);
+        URL url = Utilities.createMoviesUrl(orderBy);
 
         // pass URL to loader
-        return new MovieLoader(this, url);
+        return new MoviesLoader(this, url);
 
     }
 

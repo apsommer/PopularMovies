@@ -40,22 +40,8 @@ final class Utilities {
     private static final String API_KEY = "api_key";
     private static final String api_key = "ae7b929b7942ee2ffc3c8c7d1a7af8cf"; // TODO add API key here
 
-    static ArrayList<MovieObject> getMoviesData(URL url) {
-
-        // perform HTTP request to the URL and receive a JSON response back
-        String responseJSON = null;
-        try {
-            responseJSON = getResponseFromHttp(url);
-        } catch (IOException e) {
-            Log.e("~~~~~~~~~~~~~~~~", e.toString());
-        }
-
-        return extractMoviesFromJSON(responseJSON);
-
-    }
-
     // create a URL with the given user preference for sort order
-    static URL createUrl(String orderBy) {
+    static URL createMoviesUrl(String orderBy) {
 
         // assemble the full query by compiling constituent parts
         Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL + orderBy);
@@ -117,12 +103,15 @@ final class Utilities {
     }
 
     // obtain JSON response string from API endpoint
-    private static String getResponseFromHttp(URL url) throws IOException {
+    public static String getResponseFromHttp(URL url){
 
-        // open the network connection
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        String responseJson = null;
 
+        // HTTP connections potential throws IOException
         try {
+
+            // open the network connection
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
             // create an input stream from the opened connection
             InputStream inputStream = urlConnection.getInputStream();
@@ -133,22 +122,23 @@ final class Utilities {
             scanner.useDelimiter("\\A");
 
             // check if there is anything in the stream
-            boolean hasInput = scanner.hasNext();
-            if (hasInput) {
-                return scanner.next();
-            } else {
-                return null;
+            if (scanner.hasNext()) {
+                responseJson = scanner.next();
             }
 
-        // close the connection
-        } finally {
+            // close the connection
             urlConnection.disconnect();
+
+        } catch (IOException e) {
+            Log.e("~~~~~~~~~~~~~~~~~~~", e.toString());
         }
+
+        return responseJson;
 
     }
 
     // convert JSON payload to a list of custom movie objects
-    private static ArrayList<MovieObject> extractMoviesFromJSON(String JSONresponse) {
+    public static ArrayList<MovieObject> extractMoviesFromJSON(String JSONresponse) {
 
         // initialize an empty ArrayList
         ArrayList<MovieObject> movies = new ArrayList<>();
