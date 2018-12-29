@@ -41,7 +41,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // image view for movie poster
-        private final ImageView mPoster;
+        private final ImageView mThumbnail;
 
         // constructor
         MovieViewHolder(View itemView) {
@@ -50,7 +50,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             super(itemView);
 
             // set member variables
-            mPoster = itemView.findViewById(R.id.iv_poster);
+            mThumbnail = itemView.findViewById(R.id.iv_thumbnail);
 
             // set click listener on view
             itemView.setOnClickListener(this);
@@ -72,7 +72,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         void bind(String posterPath) {
 
             // set the image view in grid_item
-            Picasso.with(mContext).load(posterPath).into(mPoster);
+            Picasso.with(mContext).load(posterPath).into(mThumbnail);
 
         }
 

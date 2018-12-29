@@ -30,14 +30,14 @@ public class DetailActivity extends AppCompatActivity {
         TextView mTitleTV = findViewById(R.id.tv_title);
         TextView mPlotTV = findViewById(R.id.tv_plot);
         TextView mDateTV = findViewById(R.id.tv_date);
-        ImageView mThumbnailIV = findViewById(R.id.iv_thumbnail);
+        ImageView mPosterIV = findViewById(R.id.iv_poster);
         RatingBar mRatingRB = findViewById(R.id.rb_stars);
 
         // set content
         mTitleTV.setText(movie.getTitle());
         mPlotTV.setText(movie.getPlot());
         mDateTV.setText(formatDate(movie.getDate()));
-        Picasso.with(this).load(movie.getPosterPath()).into(mThumbnailIV);
+        Picasso.with(this).load(movie.getPosterPath()).into(mPosterIV);
         mRatingRB.setRating((float) movie.getRating());
 
     }
