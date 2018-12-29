@@ -127,6 +127,7 @@ final class Utilities {
                 JSONObject currentResult = results.getJSONObject(i);
 
                 // extract desired metadata from JSON key : value pairs
+                int id = currentResult.getInt("id");
                 String title = currentResult.getString("title");
                 String relativePosterPath = currentResult.getString("poster_path");
                 String plot = currentResult.getString("overview");
@@ -138,7 +139,7 @@ final class Utilities {
                 String posterPath = BASE_IMAGE_URL + IMAGE_SIZE + relativePosterPath;
 
                 // add data to new movie object and store in ArrayList
-                movies.add(new MovieObject(title, posterPath, plot, rating, date));
+                movies.add(new MovieObject(id, title, posterPath, plot, rating, date));
 
             }
 

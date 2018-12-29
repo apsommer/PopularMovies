@@ -6,6 +6,7 @@ import java.io.Serializable;
 class MovieObject implements Serializable {
 
     // attributes
+    private final int mId; // id
     private final String mTitle; // title
     private final String mPosterPath; // URL to poster image
     private final String mPlot; // short synopsis of plot
@@ -13,8 +14,9 @@ class MovieObject implements Serializable {
     private final String mDate; // release date
 
     // constructor
-    MovieObject(String title, String posterPath, String plot, double rating, String date) {
+    MovieObject(int id, String title, String posterPath, String plot, double rating, String date) {
 
+        mId = id;
         mTitle = title;
         mPosterPath = posterPath;
         mPlot = plot;
@@ -24,6 +26,9 @@ class MovieObject implements Serializable {
     }
 
     // getters
+    int getId() {
+        return mId;
+    }
     String getTitle() {
         return mTitle;
     }

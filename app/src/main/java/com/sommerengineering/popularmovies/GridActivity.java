@@ -50,13 +50,13 @@ public class GridActivity extends AppCompatActivity implements
         mMovieGrid = findViewById(R.id.rv_recycler);
         ArrayList<MovieObject> movies = new ArrayList<>();
         mAdapter = new MovieAdapter(this, TOTAL_NUMBER_OF_MOVIES, movies, this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, Utilities.calculateNumberOfColumns(mContext));
 
-        // setup the indicator widgets
+        // get references to the indicator widgets
         mProgressBar = findViewById(R.id.pb_progress);
         mErrorTextView = findViewById(R.id.tv_error);
 
         // associate the layout manager and adapter to the recycler view
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, Utilities.calculateNumberOfColumns(mContext));
         mMovieGrid.setLayoutManager(gridLayoutManager);
         mMovieGrid.setAdapter(mAdapter);
 
@@ -144,7 +144,10 @@ public class GridActivity extends AppCompatActivity implements
         String orderByDefaultValue = getString(R.string.settings_order_by_default);
         String orderBy = sharedPrefs.getString(orderByKey, orderByDefaultValue);
 
+        // build the URL based on user preference for sort order
         URL url = Utilities.createUrl(orderBy);
+
+        // pass URL to loader
         return new MovieLoader(this, url);
 
     }
