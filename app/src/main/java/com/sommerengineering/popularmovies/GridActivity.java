@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +28,7 @@ public class GridActivity extends AppCompatActivity implements
 
     // constants
     private static final int TOTAL_NUMBER_OF_MOVIES = 20;
-    private static final int MOVIE_LOADER_ID = 0;
+    private static final int GRID_MOVIE_LOADER_ID = 0;
 
     // member variables
     private MovieAdapter mAdapter;
@@ -35,6 +36,7 @@ public class GridActivity extends AppCompatActivity implements
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
     private Context mContext;
+    private GridLayoutManager mGridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +58,8 @@ public class GridActivity extends AppCompatActivity implements
         mErrorTextView = findViewById(R.id.tv_error);
 
         // associate the layout manager and adapter to the recycler view
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, Utilities.calculateNumberOfColumns(mContext));
-        mMovieGrid.setLayoutManager(gridLayoutManager);
+        mGridLayoutManager = new GridLayoutManager(this, Utilities.calculateNumberOfColumns(mContext));
+        mMovieGrid.setLayoutManager(mGridLayoutManager);
         mMovieGrid.setAdapter(mAdapter);
 
         // the images in the grid will all be the same size
@@ -71,7 +73,7 @@ public class GridActivity extends AppCompatActivity implements
             LoaderManager loaderManager = getLoaderManager();
 
             // this initialization causes the OS to call onCreateLoader()
-            loaderManager.initLoader(MOVIE_LOADER_ID, null, this);
+            loaderManager.initLoader(GRID_MOVIE_LOADER_ID, null, this);
 
         }
         else { // no internet connection
@@ -131,9 +133,12 @@ public class GridActivity extends AppCompatActivity implements
     }
 
     // automatically called when the loader manager determines that a loader with an id of
-    // MOVIE_LOADER_ID does not exist
+    // GRID_MOVIE_LOADER_ID does not exist
     @Override
     public Loader<ArrayList<MovieObject>> onCreateLoader(int id, Bundle args) {
+
+        // show the progress bar
+        mProgressBar.setVisibility(View.VISIBLE);
 
         // get the hardcoded default preferences
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -160,7 +165,7 @@ public class GridActivity extends AppCompatActivity implements
         mAdapter.clear();
 
         // hide the progress bar
-        mProgressBar.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.INVISIBLE);
 
         // check the input exists and is not empty
         if (movies != null && !movies.isEmpty()) {
@@ -168,6 +173,7 @@ public class GridActivity extends AppCompatActivity implements
             // calling addAll method on the adapter triggers the recycler grid to update
             mAdapter.addAll(movies);
             mAdapter.notifyDataSetChanged();
+
         }
         else {
 

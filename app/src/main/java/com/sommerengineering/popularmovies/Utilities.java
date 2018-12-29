@@ -24,8 +24,10 @@ final class Utilities {
     // simple tag for log messages
     private static final String LOG_TAG = Utilities.class.getSimpleName();
 
-    // constants
+    // constants TODO https?
     private static final String THE_MOVIE_DATABASE_BASE_URL = "http://api.themoviedb.org/3/movie/";
+    private static final String VIDEOS_ENDPOINT = "/videos";
+
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String THUMBNAIL_IMAGE_SIZE = "w342/";
     private static final String POSTER_IMAGE_SIZE = "original";
@@ -34,7 +36,7 @@ final class Utilities {
     private static final String API_KEY = "api_key";
     private static final String api_key = "ae7b929b7942ee2ffc3c8c7d1a7af8cf"; // TODO add API key here
 
-    static ArrayList<MovieObject> getMovieData(URL url) {
+    static ArrayList<MovieObject> getMoviesData(URL url) {
 
         // perform HTTP request to the URL and receive a JSON response back
         String responseJSON = null;
@@ -72,6 +74,39 @@ final class Utilities {
         }
 
         Log.e("~~~~~~~~~~~~~~~~~~~~ ", String.valueOf(url));
+
+        return url;
+
+    }
+
+    // create a URL for a specific movie to return ratings and
+    static URL createVideosUrl(int movieId) {
+
+        // convert int ID to String
+        String id = String.valueOf(movieId);
+
+        // assemble the full query by compiling constituent parts
+        Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL + id + VIDEOS_ENDPOINT);
+
+        // prepare URI for appending the query parameters
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        // append query parameters, for example "api_key=#"
+        uriBuilder.appendQueryParameter(API_KEY, api_key);
+
+        // convert URI to URL and return
+        String uriString = uriBuilder.toString();
+
+        // catch a malformed URL
+        URL url = null;
+        try {
+            url = new URL(uriString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        Log.e("~~~~~~~~~~~~~~~~~~~~ ", String.valueOf(url));
+        // https://api.themoviedb.org/3/movie/19404/videos?api_key=ae7b929b7942ee2ffc3c8c7d1a7af8cf
 
         return url;
 

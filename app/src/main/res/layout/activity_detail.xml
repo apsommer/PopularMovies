@@ -32,17 +32,6 @@
             tools:rating="6.4"
             android:layout_margin="@dimen/detail_spacing" />
 
-        <ImageView
-            android:id="@+id/iv_poster"
-            android:layout_below="@id/tv_plot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:src="@mipmap/ic_launcher"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:layout_marginBottom="@dimen/detail_extra_spacing"
-            android:contentDescription="@string/content_description_for_poster_image" />
-
         <TextView
             android:id="@+id/tv_date"
             android:layout_below="@id/rb_stars"
@@ -52,7 +41,7 @@
             android:fontFamily="@font/adamina"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/detail_spacing"
-            tools:text="December 2, 2018" />
+            tools:text="December 2, 2019" />
 
         <TextView
             android:id="@+id/tv_plot"
@@ -66,6 +55,25 @@
             android:layout_marginRight="@dimen/detail_spacing"
             android:textColor="@color/color_black"
             tools:text="Plot synopsis" />
+
+        <!--<ImageButton-->
+            <!--android:layout_width="48dp"-->
+            <!--android:layout_height="48dp"-->
+            <!--android:background="@drawable/play"-->
+            <!--android:layout_below="@id/tv_plot"-->
+            <!--android:layout_marginLeft="@dimen/detail_spacing"-->
+
+            <!--/>-->
+
+        <ImageView
+            android:id="@+id/iv_poster"
+            android:layout_below="@id/tv_plot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:src="@mipmap/ic_launcher"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_description_for_poster_image" />
 
     </RelativeLayout>
 

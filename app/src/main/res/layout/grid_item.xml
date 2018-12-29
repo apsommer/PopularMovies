@@ -11,4 +11,3 @@
     android:layout_margin="@dimen/grid_spacing"
     android:contentDescription="@string/content_description_for_poster_image" />
 
-

@@ -19,7 +19,7 @@
         android:padding="@dimen/empty_state_spacing"
         android:text="@string/no_movies_found"
         android:textSize="@dimen/empty_state_text_size"
-        android:visibility="gone"
+        android:visibility="invisible"
         android:layout_gravity="center" />
 
     <ProgressBar
@@ -27,6 +27,6 @@
         android:layout_height="@dimen/progress_bar_dimension"
         android:layout_width="@dimen/progress_bar_dimension"
         android:layout_gravity="center"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
 </merge>

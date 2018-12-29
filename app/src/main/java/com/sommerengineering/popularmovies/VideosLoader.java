@@ -2,17 +2,18 @@ package com.sommerengineering.popularmovies;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+
 import java.net.URL;
 import java.util.ArrayList;
 
 // loads a list of movies and related metadata using an HTTP request on a background thread
-class MovieLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
+class VideosLoader extends AsyncTaskLoader<MovieObject> {
 
     // initialize member variable for URL address
     private final URL mUrl;
 
     // constructor
-    public MovieLoader(Context context, URL url) {
+    public VideosLoader(Context context, URL url) {
 
         // finish initialization using superclass
         super(context);
@@ -30,7 +31,7 @@ class MovieLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
     }
 
     @Override
-    public ArrayList<MovieObject> loadInBackground() {
+    public MovieObject loadInBackground() {
 
         // ensure that the URL exists
         if (mUrl == null) {
@@ -38,7 +39,8 @@ class MovieLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
         }
 
         // perform the HTTP request for movie data and process the JSON response
-        return Utilities.getMoviesData(mUrl);
+        // TODO temporary scaffolding
+        return new MovieObject(0, "apples", "bananas", "carrots", "horrible", 1.12, "December 29, 2018");
 
     }
 }

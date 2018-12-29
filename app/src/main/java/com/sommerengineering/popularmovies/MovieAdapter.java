@@ -69,10 +69,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
 
         // called by the adapter
-        void bind(String posterPath) {
+        void bind(String thumbnailPath) {
 
             // set the image view in grid_item
-            Picasso.with(mContext).load(posterPath).into(mThumbnail);
+            Picasso.with(mContext).load(thumbnailPath).into(mThumbnail);
 
         }
 
@@ -106,8 +106,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             MovieObject currentMovie = mMovies.get(position);
 
             // call into holder class to update the poster image for this item
-            String posterPath = currentMovie.getThumbnailPath();
-            holder.bind(posterPath);
+            String thumbnailPath = currentMovie.getThumbnailPath();
+            holder.bind(thumbnailPath);
         }
 
     }
@@ -120,7 +120,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     // update adapter
     public void addAll(ArrayList<MovieObject> movies) {
         mMovies = movies;
-
     }
 
 }
