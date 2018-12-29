@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     // member variables
     private Context mContext;
+    private ProgressBar mProgressBar;
     private int mId;
 
     @Override
@@ -53,6 +55,7 @@ public class DetailActivity extends AppCompatActivity implements
         TextView mDateTV = findViewById(R.id.tv_date);
         ImageView mPosterIV = findViewById(R.id.iv_poster);
         RatingBar mRatingRB = findViewById(R.id.rb_stars);
+        mProgressBar = findViewById(R.id.pb_progress);
 
         // get the movie id
         mId = movie.getId();
@@ -60,9 +63,9 @@ public class DetailActivity extends AppCompatActivity implements
         // set text
         mTitleTV.setText(movie.getTitle());
         mPlotTV.setText(movie.getPlot());
+        mDateTV.setText(Utilities.formatDate(movie.getDate()));
 
-        // extra space because the custom italic font sometimes gets cut-off
-        mDateTV.setText(formatDate(movie.getDate()) + " ");
+        // set poster image and rating stars
         Picasso.with(this).load(movie.getPosterPath()).into(mPosterIV);
         mRatingRB.setRating((float) movie.getRating());
 
@@ -78,6 +81,9 @@ public class DetailActivity extends AppCompatActivity implements
     // DETAIL_MOVIE_LOADER_ID does not exist
     @Override
     public Loader<MovieObject> onCreateLoader(int id, Bundle args) {
+
+        // turn on a progress bar
+        mProgressBar.setVisibility(View.VISIBLE);
 
         // TODO check a SQLite database for "favorites"
 
@@ -96,8 +102,8 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<MovieObject> loader, MovieObject movie) {
 
-        // hide the progress bar TODO implement progress bar for this network call
-        // mProgressBar.setVisibility(View.INVISIBLE);
+        // hide the progress bar
+        mProgressBar.setVisibility(View.INVISIBLE);
 
         // check the input exists and is not empty
         if (movie != null) {
@@ -116,27 +122,6 @@ public class DetailActivity extends AppCompatActivity implements
         // TODO do nothing for now
     }
 
-    // coverts datetime timestamp to simple date only format
-    private String formatDate(String timestamp) {
 
-        // expected datetime format
-        String expectedPattern = "yyyy-MM-dd";
-        SimpleDateFormat expectedFormatter = new SimpleDateFormat(expectedPattern, Locale.getDefault());
-
-        // change to simpler date only
-        String targetPattern = "MMMM d, yyyy";
-        SimpleDateFormat targetFormatter = new SimpleDateFormat(targetPattern, Locale.getDefault());
-
-        // unexpected timestamp format will cause parsing error
-        try {
-            Date date = expectedFormatter.parse(timestamp);
-            return targetFormatter.format(date);
-        }
-        catch (ParseException e) {
-            Log.e("~~~~~~~~~~~~~~~~~~~", "Error formatting timestamp.", e);
-            return timestamp;
-        }
-
-    }
 
 }

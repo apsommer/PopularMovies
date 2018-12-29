@@ -75,6 +75,15 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/content_description_for_poster_image" />
 
+        <ProgressBar
+            android:id="@+id/pb_progress"
+            android:layout_height="@dimen/progress_bar_dimension"
+            android:layout_width="@dimen/progress_bar_dimension"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignBottom="@id/tv_date"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
 </ScrollView>

@@ -14,7 +14,11 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 
 // final access modifier because no objects of this class will ever be created
@@ -203,6 +207,31 @@ final class Utilities {
         // number of columns
         int noOfColumns = (int) (dpWidth / 180);
         return noOfColumns;
+    }
+
+    // coverts datetime timestamp to simple date only format
+    public static String formatDate(String timestamp) {
+
+        // expected datetime format from JSON
+        String expectedPattern = "yyyy-MM-dd";
+        SimpleDateFormat expectedFormatter =
+                new SimpleDateFormat(expectedPattern, Locale.getDefault());
+
+        // change to a nicer format
+        String targetPattern = "MMMM d, yyyy";
+        SimpleDateFormat targetFormatter =
+                new SimpleDateFormat(targetPattern, Locale.getDefault());
+
+        // unexpected timestamp format will cause parsing error
+        try {
+            Date date = expectedFormatter.parse(timestamp);
+            return targetFormatter.format(date);
+        }
+        catch (ParseException e) {
+            Log.e("~~~~~~~~~~~~~~~~~~~", "Error formatting timestamp.", e);
+            return timestamp;
+        }
+
     }
 
 }
