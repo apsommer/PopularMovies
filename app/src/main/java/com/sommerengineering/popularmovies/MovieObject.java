@@ -8,16 +8,18 @@ class MovieObject implements Serializable {
     // attributes
     private final int mId; // id
     private final String mTitle; // title
+    private final String mThumbnailPath; // URL to poster image
     private final String mPosterPath; // URL to poster image
     private final String mPlot; // short synopsis of plot
     private final double mRating; // aggregated rating between 1-10
     private final String mDate; // release date
 
     // constructor
-    MovieObject(int id, String title, String posterPath, String plot, double rating, String date) {
+    MovieObject(int id, String title, String thumbnailPath, String posterPath, String plot, double rating, String date) {
 
         mId = id;
         mTitle = title;
+        mThumbnailPath = thumbnailPath;
         mPosterPath = posterPath;
         mPlot = plot;
         mRating = rating;
@@ -31,6 +33,9 @@ class MovieObject implements Serializable {
     }
     String getTitle() {
         return mTitle;
+    }
+    String getThumbnailPath() {
+        return mThumbnailPath;
     }
     String getPosterPath() {
         return mPosterPath;

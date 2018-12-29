@@ -27,7 +27,8 @@ final class Utilities {
     // constants
     private static final String THE_MOVIE_DATABASE_BASE_URL = "http://api.themoviedb.org/3/movie/";
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
-    private static final String IMAGE_SIZE = "w342/";
+    private static final String THUMBNAIL_IMAGE_SIZE = "w342/";
+    private static final String POSTER_IMAGE_SIZE = "original";
 
     // query parameters
     private static final String API_KEY = "api_key";
@@ -136,10 +137,11 @@ final class Utilities {
 
                 // the provided image path is relative
                 // the base URL and size precede the relative path
-                String posterPath = BASE_IMAGE_URL + IMAGE_SIZE + relativePosterPath;
+                String thumbnailPath = BASE_IMAGE_URL + THUMBNAIL_IMAGE_SIZE + relativePosterPath;
+                String posterPath = BASE_IMAGE_URL + POSTER_IMAGE_SIZE + relativePosterPath;
 
                 // add data to new movie object and store in ArrayList
-                movies.add(new MovieObject(id, title, posterPath, plot, rating, date));
+                movies.add(new MovieObject(id, title, thumbnailPath, posterPath, plot, rating, date));
 
             }
 

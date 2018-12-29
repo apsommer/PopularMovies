@@ -106,7 +106,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             MovieObject currentMovie = mMovies.get(position);
 
             // call into holder class to update the poster image for this item
-            String posterPath = currentMovie.getPosterPath();
+            String posterPath = currentMovie.getThumbnailPath();
             holder.bind(posterPath);
         }
 
