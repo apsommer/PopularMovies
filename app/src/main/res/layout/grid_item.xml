@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:scaleType="fitXY"
     android:adjustViewBounds="true"
-    tools:src="@mipmap/ic_launcher"
+    tools:src="@drawable/review"
     android:layout_margin="@dimen/grid_spacing"
     android:contentDescription="@string/content_description_for_poster_image" />
 

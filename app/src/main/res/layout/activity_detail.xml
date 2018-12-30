@@ -10,14 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <!--<ImageButton-->
-
-            <!--android:layout_width="48dp"-->
-            <!--android:layout_height="48dp"-->
-            <!--android:layout_alignTop="@id/tv_date"-->
-
-            <!--android:background="@drawable/play" />-->
-
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
@@ -68,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/detail_spacing"
-            tools:src="@mipmap/ic_launcher"
+            tools:src="@drawable/review"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:contentDescription="@string/content_description_for_poster_image" />
