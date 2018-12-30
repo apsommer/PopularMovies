@@ -9,6 +9,7 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.graphics.Movie;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.util.Pair;
@@ -130,7 +131,7 @@ public class DetailActivity extends AppCompatActivity implements
                 // tuple is video {title, URL}
                 currentPair = videos.get(i);
                 final String currentName = currentPair.first;
-                URL currentUrl = currentPair.second;
+                final URL currentUrl = currentPair.second;
                 Log.e("~~~~~~~~~", currentName + " | " + currentUrl.toString());
 
                 // TODO ImageButton
@@ -163,11 +164,12 @@ public class DetailActivity extends AppCompatActivity implements
                 youtubeIB.setImageResource(R.drawable.play);
                 youtubeIB.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-                // TODO click opens YouTube (or other media player) via implicit intent
+                // click opens YouTube (or other media player) via implicit intent
                 youtubeIB.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(mContext, currentName, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentUrl.toString()));
+                        startActivity(intent);
                     }
                 });
 
