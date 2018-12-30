@@ -15,9 +15,8 @@ class MoviesLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
     public MoviesLoader(Context context, URL url) {
 
         // finish initialization using superclass
-        super(context);
-
         // this loader has only one designated URL address
+        super(context);
         mUrl = url;
 
     }

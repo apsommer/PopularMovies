@@ -12,11 +12,13 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -49,8 +51,6 @@ public class GridActivity extends AppCompatActivity implements
 
         // setup the recycler view and adapter
         mMovieGrid = findViewById(R.id.rv_recycler);
-        ArrayList<MovieObject> movies = new ArrayList<>();
-        mAdapter = new MoviesAdapter(this, TOTAL_NUMBER_OF_MOVIES, movies, this);
 
         // get references to the indicator widgets
         mProgressBar = findViewById(R.id.pb_progress);
@@ -59,6 +59,9 @@ public class GridActivity extends AppCompatActivity implements
         // associate the layout manager and adapter to the recycler view
         mGridLayoutManager = new GridLayoutManager(this, Utilities.calculateNumberOfColumns(mContext));
         mMovieGrid.setLayoutManager(mGridLayoutManager);
+
+        ArrayList<MovieObject> movies = new ArrayList<>();
+        mAdapter = new MoviesAdapter(this, TOTAL_NUMBER_OF_MOVIES, movies, this);
         mMovieGrid.setAdapter(mAdapter);
 
         // the images in the grid will all be the same size
@@ -78,7 +81,7 @@ public class GridActivity extends AppCompatActivity implements
         else { // no internet connection
 
             // hide the progress bar
-            mProgressBar.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.INVISIBLE);
 
             // the articles list is empty
             mErrorTextView.setVisibility(View.VISIBLE);
@@ -172,6 +175,10 @@ public class GridActivity extends AppCompatActivity implements
             // calling addAll method on the adapter triggers the recycler grid to update
             mAdapter.addAll(movies);
             mAdapter.notifyDataSetChanged();
+            Log.e("apples", movies.toString());
+            Log.e("apples", mAdapter.toString());
+            Toast.makeText(mContext, "Why won't this work first time through? \n" + movies.toString(),
+                    Toast.LENGTH_LONG).show();
 
         }
         else {
@@ -179,19 +186,12 @@ public class GridActivity extends AppCompatActivity implements
             // this conditional handles the rare edge case of the following sequence:
             // (1) successful network call (2) populate recycler grid
             // (3) leave app (4) lose internet connection (5) return to app
-            if (isConnected()) {
-
-                // the movie list is empty because no match with search criteria
-                mErrorTextView.setText(R.string.no_movies_found);
-
-            }
+            // the movie list is empty because no match with search criteria
+            if (isConnected()) mErrorTextView.setText(R.string.no_movies_found);
 
             // internet connection was lost after a loader successfully completed
-            else {
-
-                // the movie list is empty because there is no internet connection
-                mErrorTextView.setText(R.string.no_internet_connection);
-            }
+            // the movie list is empty because there is no internet connection
+            else mErrorTextView.setText(R.string.no_internet_connection);
 
         }
 

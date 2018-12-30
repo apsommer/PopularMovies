@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
@@ -69,8 +70,15 @@ public class DetailActivity extends AppCompatActivity implements
         mPlotTV.setText(movie.getPlot());
         dateTV.setText(Utilities.formatDate(movie.getDate()));
 
-        // set poster image and rating stars
-        Picasso.with(this).load(movie.getPosterPath()).into(mPosterIV);
+        // critical piece!
+        // placeholder image must be set for the Picasso library to load correctly on activity start
+        ColorDrawable simpleColor =
+                new ColorDrawable(mContext.getResources().getColor(R.color.color_black));
+
+        // set the image view in the grid item layout
+        Picasso.with(mContext).load(movie.getPosterPath()).placeholder(simpleColor).into(mPosterIV);
+
+        // set rating stars
         ratingRB.setRating((float) movie.getRating());
 
         // initialize a loader manager to handle a background thread

@@ -1,6 +1,7 @@
 package com.sommerengineering.popularmovies;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,8 +72,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         // called by the adapter
         void bind(String thumbnailPath) {
 
-            // set the image view in grid_item
-            Picasso.with(mContext).load(thumbnailPath).into(mThumbnail);
+            // critical piece!
+            // placeholder image must be set for the Picasso library to load correctly on app start
+            ColorDrawable simpleColor =
+                    new ColorDrawable(mContext.getResources().getColor(R.color.color_black));
+
+            // set the image view in the grid item layout
+            Picasso.with(mContext).load(thumbnailPath).placeholder(simpleColor).into(mThumbnail);
 
         }
 

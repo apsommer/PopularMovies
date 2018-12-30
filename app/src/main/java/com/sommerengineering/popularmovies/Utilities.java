@@ -36,7 +36,7 @@ final class Utilities {
     private static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=";
 
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
-    private static final String THUMBNAIL_IMAGE_SIZE = "w342/";
+    private static final String THUMBNAIL_IMAGE_SIZE = "w342/"; // 92, 154, 185, 342, 500, 780, original
     private static final String POSTER_IMAGE_SIZE = "original";
 
     // query parameters

@@ -18,9 +18,8 @@ class VideosLoader extends AsyncTaskLoader<ArrayList<Pair<String, URL>>> {
     public VideosLoader(Context context, URL url) {
 
         // finish initialization using superclass
-        super(context);
-
         // this loader has only one designated URL address
+        super(context);
         mUrl = url;
 
     }
