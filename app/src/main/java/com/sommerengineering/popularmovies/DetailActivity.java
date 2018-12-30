@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Movie;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +27,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<MovieObject> {
+        LoaderManager.LoaderCallbacks<ArrayList<Pair<String, URL>>> {
 
     // constants
     private static final int DETAIL_MOVIE_LOADER_ID = 1;
@@ -80,7 +81,7 @@ public class DetailActivity extends AppCompatActivity implements
     // automatically called when the loader manager determines that a loader with an id of
     // DETAIL_MOVIE_LOADER_ID does not exist
     @Override
-    public Loader<MovieObject> onCreateLoader(int id, Bundle args) {
+    public Loader<ArrayList<Pair<String, URL>>> onCreateLoader(int id, Bundle args) {
 
         // turn on a progress bar
         mProgressBar.setVisibility(View.VISIBLE);
@@ -91,25 +92,35 @@ public class DetailActivity extends AppCompatActivity implements
         URL url = Utilities.createVideosUrl(mId);
 
         // pass URL to loader
-        // TODO need a new Loader class
-
-        // TODO temporary ...
         return new VideosLoader(this, url);
 
     }
 
     // automatically called when loader background thread completes
     @Override
-    public void onLoadFinished(Loader<MovieObject> loader, MovieObject movie) {
+    public void onLoadFinished(Loader<ArrayList<Pair<String,
+            URL>>> loader, ArrayList<Pair<String, URL>> videos) {
 
         // hide the progress bar
         mProgressBar.setVisibility(View.INVISIBLE);
 
         // check the input exists and is not empty
-        if (movie != null) {
+        if (videos != null) {
 
-            // calling addAll method on the adapter triggers the recycler grid to update
-            Log.e("onLoadFinished", "1-2-3");
+            Pair<String, URL> currentPair;
+
+            // loop through the array of video tuples
+            for (int i = 0; i < videos.size(); i++) {
+
+                // tuple is (video title, video URL)
+                currentPair = videos.get(i);
+                Log.e("~~~~~~~~~", currentPair.toString());
+
+                // TODO build a button for each tuple
+
+
+            }
+
 
         }
 
@@ -117,7 +128,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     // previously created loader is no longer needed and existing data should be discarded
     @Override
-    public void onLoaderReset(Loader<MovieObject> loader) {
+    public void onLoaderReset(Loader<ArrayList<Pair<String, URL>>> loader) {
 
         // TODO do nothing for now
     }

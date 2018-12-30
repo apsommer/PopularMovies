@@ -2,6 +2,7 @@ package com.sommerengineering.popularmovies;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.util.Pair;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -31,6 +32,7 @@ final class Utilities {
     // constants TODO https?
     private static final String THE_MOVIE_DATABASE_BASE_URL = "http://api.themoviedb.org/3/movie/";
     private static final String VIDEOS_ENDPOINT = "/videos";
+    private static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=";
 
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String THUMBNAIL_IMAGE_SIZE = "w342/";
@@ -138,7 +140,7 @@ final class Utilities {
     }
 
     // convert JSON payload to a list of custom movie objects
-    public static ArrayList<MovieObject> extractMoviesFromJSON(String JSONresponse) {
+    public static ArrayList<MovieObject> extractMoviesFromJson(String responseJson) {
 
         // initialize an empty ArrayList
         ArrayList<MovieObject> movies = new ArrayList<>();
@@ -147,7 +149,7 @@ final class Utilities {
         try {
 
             // go down one level of JSON payload
-            JSONObject root = new JSONObject(JSONresponse);
+            JSONObject root = new JSONObject(responseJson);
             JSONArray results = root.getJSONArray("results");
 
             // loop through results (results = movies)
@@ -185,7 +187,71 @@ final class Utilities {
 
     }
 
-    //
+    // convert JSON payload to a list of video URLs
+    public static ArrayList<Pair<String, URL>> extractVideosFromJson(String responseJson) {
+
+        // initialize an empty tuple and arraylist of tuples
+        Pair<String, URL> pair;
+        ArrayList<Pair<String, URL>> videos = new ArrayList<>();
+
+        // parse raw JSON response string
+        try {
+
+            // go down one level of JSON payload
+            JSONObject root = new JSONObject(responseJson);
+            JSONArray results = root.getJSONArray("results");
+
+            // loop through results (results = movies)
+            for (int i = 0; i < results.length(); i++) {
+
+                // current movie
+                JSONObject currentResult = results.getJSONObject(i);
+
+                // extract desired metadata from JSON key : value pairs
+                String pathKey = currentResult.getString("key");
+                String videoName = currentResult.getString("name");
+                String siteName = currentResult.getString("site");
+
+                // only display YouTube trailers for now ...
+                if (siteName.equals("YouTube")) {
+
+                    // assemble the full query by compiling constituent parts
+                    Uri baseUri = Uri.parse(YOUTUBE_BASE_URL + pathKey);
+
+                    // convert URI to URL and return
+                    String uriString = baseUri.toString();
+
+                    // catch a malformed URL
+                    URL youTubeUrl = null;
+                    try {
+                        youTubeUrl = new URL(uriString);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+
+                    // each video has a name and a URL, simple tuples
+                    pair = new Pair<>(videoName, youTubeUrl);
+
+                    // add data to ArrayList
+                    videos.add(pair);
+
+                }
+
+            }
+
+        } catch (JSONException e) {
+
+            // log exception stack trace
+            Log.e(LOG_TAG, "Problem parsing the movie JSON results: ", e);
+
+        }
+
+        return videos;
+
+    }
+
+    // passed to the layout manager of the recycler grid
+    // movie thumbnails will always be (roughly) the same size regardless of device or orientation
     public static int calculateNumberOfColumns(Context context) {
 
         // get the device screen dimensions
@@ -195,8 +261,9 @@ final class Utilities {
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
 
         // number of columns
-        int noOfColumns = (int) (dpWidth / 180);
-        return noOfColumns;
+        // 180 is the magic number ... recall that 160 dp = 1 inch
+        int numberOfColumns = (int) (dpWidth / 180);
+        return numberOfColumns;
     }
 
     // coverts datetime timestamp to simple date only format
