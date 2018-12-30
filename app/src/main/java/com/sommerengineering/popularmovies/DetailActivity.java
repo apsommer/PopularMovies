@@ -1,41 +1,29 @@
 package com.sommerengineering.popularmovies;
 
-import android.app.ActionBar;
 import android.app.LoaderManager;
-import android.app.UiAutomation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
-import android.graphics.Movie;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<Pair<String, URL>>> {
@@ -120,107 +108,123 @@ public class DetailActivity extends AppCompatActivity implements
         mProgressBar.setVisibility(View.INVISIBLE);
 
         // check the input exists and is not empty
-        if (videos != null) {
+        if (videos != null && !videos.isEmpty()) {
 
+            // initialize a tuple variable and set an ID for dynamic positioning
             Pair<String, URL> currentPair;
-            int currentId = R.id.tv_plot; // first button below the plot textview
+            int positioningID = R.id.tv_plot;
 
             // loop through the array of video tuples
             for (int i = 0; i < videos.size(); i++) {
 
-                // tuple is video {title, URL}
+                // currentPair is a tuple containing the video {title, URL}
                 currentPair = videos.get(i);
-                final String currentName = currentPair.first;
+                final String currentTitle = currentPair.first;
                 final URL currentUrl = currentPair.second;
-                Log.e("~~~~~~~~~", currentName + " | " + currentUrl.toString());
 
-                // TODO ImageButton
-                ImageButton youtubeIB = new ImageButton(this);
+                // each video has a button with the YouTube logo
+                positioningID = createYoutubeButton(positioningID, currentUrl);
 
-                // size
-                int buttonDimension =
-                        Utilities.dpToPixels(mContext,
-                        getResources().getDimension(R.dimen.youtube_button_size));
-                RelativeLayout.LayoutParams layoutParams =
-                        new RelativeLayout.LayoutParams(buttonDimension, buttonDimension);
-
-                // position
-                layoutParams.addRule(RelativeLayout.BELOW, currentId);
-                int marginStart =
-                        Utilities.dpToPixels(mContext,
-                        getResources().getDimension(R.dimen.detail_spacing));
-                layoutParams.setMarginStart(marginStart);
-
-                // associate the defined size and position parameters with the button
-                youtubeIB.setLayoutParams(layoutParams);
-
-                // let the system create an ID, then get it
-                youtubeIB.setId(View.generateViewId()); // TODO
-
-                // update ID reference for positioning of (potential) subsequent buttons
-                currentId = youtubeIB.getId();
-
-                // set image and scale it
-                youtubeIB.setImageResource(R.drawable.play);
-                youtubeIB.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
-                // click opens YouTube (or other media player) via implicit intent
-                youtubeIB.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentUrl.toString()));
-                        startActivity(intent);
-                    }
-                });
-
-                // background with ripple effect
-                TypedValue outValue = new TypedValue();
-                mContext.getTheme().resolveAttribute
-                        (android.R.attr.selectableItemBackground, outValue, true);
-                youtubeIB.setBackgroundResource(outValue.resourceId);
-
-                // add button to the layout
-                mRelativeLayout.addView(youtubeIB);
-
-                // TODO TextView
-                TextView descriptionTV = new TextView(this);
-
-                // size and position
-                layoutParams = new RelativeLayout.LayoutParams
-                        (ViewGroup.LayoutParams.WRAP_CONTENT, buttonDimension);
-                layoutParams.addRule(RelativeLayout.RIGHT_OF, currentId);
-                layoutParams.addRule(RelativeLayout.ALIGN_TOP, currentId);
-                layoutParams.setMarginStart(marginStart);
-                layoutParams.setMarginEnd(marginStart);
-
-                // associate the defined size and position parameters with the textview
-                descriptionTV.setLayoutParams(layoutParams);
-
-                // let the system create an ID
-                descriptionTV.setId(View.generateViewId());
-
-                // basic attributes
-                descriptionTV.setText(currentPair.first);
-                descriptionTV.setGravity(Gravity.CENTER_VERTICAL);
-
-                // custom font
-                Typeface font = Typeface.createFromAsset(getAssets(), "adamina.ttf");
-                descriptionTV.setTypeface(font);
-
-                // add the textview to the layout
-                mRelativeLayout.addView(descriptionTV);
+                // each video has a textview with the video title
+                createTitleTextView(positioningID, currentTitle);
 
             }
 
-            // TODO position the poster below everything
             // move poster image below the trailer video buttons
             RelativeLayout.LayoutParams posterLayoutParams =
                     (RelativeLayout.LayoutParams) mPosterIV.getLayoutParams();
 
-            posterLayoutParams.addRule(RelativeLayout.BELOW, currentId);
+            posterLayoutParams.addRule(RelativeLayout.BELOW, positioningID);
 
 
         }
+
+    }
+
+    public int createYoutubeButton(int positioningID, final URL currentUrl) {
+
+        ImageButton youtubeIB = new ImageButton(this);
+
+        // size
+        int buttonDimension =
+                Utilities.dpToPixels(mContext,
+                        getResources().getDimension(R.dimen.youtube_button_size));
+        RelativeLayout.LayoutParams layoutParams =
+                new RelativeLayout.LayoutParams(buttonDimension, buttonDimension);
+
+        // position
+        layoutParams.addRule(RelativeLayout.BELOW, positioningID);
+        int marginStart =
+                Utilities.dpToPixels(mContext, getResources().getDimension(R.dimen.detail_spacing));
+        layoutParams.setMarginStart(marginStart);
+
+        // associate the defined size and position parameters with the button
+        youtubeIB.setLayoutParams(layoutParams);
+
+        // let the system create an ID, then get it
+        youtubeIB.setId(View.generateViewId());
+
+        // update ID reference for positioning of (potential) subsequent buttons
+        positioningID = youtubeIB.getId();
+
+        // set image and scale it
+        youtubeIB.setImageResource(R.drawable.play);
+        youtubeIB.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        // click opens YouTube (or other media player) via implicit intent
+        youtubeIB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentUrl.toString()));
+                startActivity(intent);
+            }
+        });
+
+        // background with ripple effect
+        TypedValue outValue = new TypedValue();
+        mContext.getTheme().resolveAttribute
+                (android.R.attr.selectableItemBackground, outValue, true);
+        youtubeIB.setBackgroundResource(outValue.resourceId);
+
+        // add button to the layout
+        mRelativeLayout.addView(youtubeIB);
+
+        return positioningID;
+
+    }
+
+    public void createTitleTextView(int positioningID, final String currentTitle) {
+
+        TextView descriptionTV = new TextView(this);
+
+        // size and position
+        int buttonDimension =
+                Utilities.dpToPixels(mContext, getResources().getDimension(R.dimen.youtube_button_size));
+        int marginStart =
+                Utilities.dpToPixels(mContext, getResources().getDimension(R.dimen.detail_spacing));
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams
+                (ViewGroup.LayoutParams.WRAP_CONTENT, buttonDimension);
+        layoutParams.addRule(RelativeLayout.RIGHT_OF, positioningID);
+        layoutParams.addRule(RelativeLayout.ALIGN_TOP, positioningID);
+        layoutParams.setMarginStart(marginStart);
+        layoutParams.setMarginEnd(marginStart);
+
+        // associate the defined size and position parameters with the textview
+        descriptionTV.setLayoutParams(layoutParams);
+
+        // let the system create an ID
+        descriptionTV.setId(View.generateViewId());
+
+        // basic attributes
+        descriptionTV.setText(currentTitle);
+        descriptionTV.setGravity(Gravity.CENTER_VERTICAL);
+
+        // custom font
+        Typeface font = Typeface.createFromAsset(getAssets(), "adamina.ttf");
+        descriptionTV.setTypeface(font);
+
+        // add the textview to the layout
+        mRelativeLayout.addView(descriptionTV);
 
     }
 
