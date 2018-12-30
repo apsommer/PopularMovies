@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.v4.util.Pair;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -289,6 +290,11 @@ final class Utilities {
             return timestamp;
         }
 
+    }
+
+    public static int dpToPixels(Context context, float dp) {
+        return (int) TypedValue.applyDimension
+                (TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
 }

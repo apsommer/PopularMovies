@@ -6,8 +6,15 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <RelativeLayout
+        android:id="@+id/rl_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
+
+        <!--<ImageButton-->
+
+            <!--android:layout_width="48dp"-->
+            <!--android:layout_height="48dp"-->
+            <!--android:background="@drawable/play"/>-->
 
         <TextView
             android:id="@+id/tv_title"
@@ -55,15 +62,6 @@
             android:layout_marginRight="@dimen/detail_spacing"
             android:textColor="@color/color_black"
             tools:text="Plot synopsis" />
-
-        <!--<ImageButton-->
-            <!--android:layout_width="48dp"-->
-            <!--android:layout_height="48dp"-->
-            <!--android:background="@drawable/play"-->
-            <!--android:layout_below="@id/tv_plot"-->
-            <!--android:layout_marginLeft="@dimen/detail_spacing"-->
-
-            <!--/>-->
 
         <ImageView
             android:id="@+id/iv_poster"

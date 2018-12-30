@@ -1,6 +1,8 @@
 package com.sommerengineering.popularmovies;
 
+import android.app.ActionBar;
 import android.app.LoaderManager;
+import android.app.UiAutomation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
@@ -11,10 +13,15 @@ import android.preference.PreferenceManager;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -34,7 +41,10 @@ public class DetailActivity extends AppCompatActivity implements
 
     // member variables
     private Context mContext;
+    private RelativeLayout mRelativeLayout;
     private ProgressBar mProgressBar;
+    private TextView mPlotTV;
+    private ImageView mPosterIV;
     private int mId;
 
     @Override
@@ -51,24 +61,25 @@ public class DetailActivity extends AppCompatActivity implements
         MovieObject movie = (MovieObject) intent.getSerializableExtra("selectedMovie");
 
         // get references
-        TextView mTitleTV = findViewById(R.id.tv_title);
-        TextView mPlotTV = findViewById(R.id.tv_plot);
-        TextView mDateTV = findViewById(R.id.tv_date);
-        ImageView mPosterIV = findViewById(R.id.iv_poster);
-        RatingBar mRatingRB = findViewById(R.id.rb_stars);
+        mRelativeLayout = findViewById(R.id.rl_container);
+        TextView titleTV = findViewById(R.id.tv_title);
+        mPlotTV = findViewById(R.id.tv_plot);
+        TextView dateTV = findViewById(R.id.tv_date);
+        mPosterIV = findViewById(R.id.iv_poster);
+        RatingBar ratingRB = findViewById(R.id.rb_stars);
         mProgressBar = findViewById(R.id.pb_progress);
 
         // get the movie id
         mId = movie.getId();
 
         // set text
-        mTitleTV.setText(movie.getTitle());
+        titleTV.setText(movie.getTitle());
         mPlotTV.setText(movie.getPlot());
-        mDateTV.setText(Utilities.formatDate(movie.getDate()));
+        dateTV.setText(Utilities.formatDate(movie.getDate()));
 
         // set poster image and rating stars
         Picasso.with(this).load(movie.getPosterPath()).into(mPosterIV);
-        mRatingRB.setRating((float) movie.getRating());
+        ratingRB.setRating((float) movie.getRating());
 
         // initialize a loader manager to handle a background thread
         LoaderManager loaderManager = getLoaderManager();
@@ -117,7 +128,41 @@ public class DetailActivity extends AppCompatActivity implements
                 Log.e("~~~~~~~~~", currentPair.toString());
 
                 // TODO build a button for each tuple
+                ImageButton button = new ImageButton(this);
 
+                // size and position
+                int buttonDimension =
+                        Utilities.dpToPixels(mContext,
+                        getResources().getDimension(R.dimen.youtube_button_size));
+                RelativeLayout.LayoutParams layoutParams =
+                        new RelativeLayout.LayoutParams(buttonDimension, buttonDimension);
+                layoutParams.addRule(RelativeLayout.BELOW, R.id.tv_plot);
+
+                int marginStart =
+                        Utilities.dpToPixels(mContext,
+                        getResources().getDimension(R.dimen.detail_spacing));
+                layoutParams.setMarginStart(marginStart);
+                button.setLayoutParams(layoutParams);
+
+                // basic attributes
+                button.setId(View.generateViewId());
+                button.setImageResource(R.drawable.play);
+                button.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                // background with ripple effect
+                TypedValue outValue = new TypedValue();
+                mContext.getTheme().resolveAttribute
+                        (android.R.attr.selectableItemBackground, outValue, true);
+                button.setBackgroundResource(outValue.resourceId);
+
+                // add this button to activity_detail
+                mRelativeLayout.addView(button);
+
+                // move poster image below the trailer video buttons
+                RelativeLayout.LayoutParams posterLayoutParams =
+                        (RelativeLayout.LayoutParams) mPosterIV.getLayoutParams();
+
+                posterLayoutParams.addRule(RelativeLayout.BELOW, button.getId());
 
             }
 
