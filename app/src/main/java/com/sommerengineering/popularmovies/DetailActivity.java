@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.graphics.Movie;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -127,42 +129,70 @@ public class DetailActivity extends AppCompatActivity implements
                 currentPair = videos.get(i);
                 Log.e("~~~~~~~~~", currentPair.toString());
 
-                // TODO build a button for each tuple
-                ImageButton button = new ImageButton(this);
+                // TODO ImageButton
+                ImageButton youtubeIB = new ImageButton(this);
 
-                // size and position
+                // size
                 int buttonDimension =
                         Utilities.dpToPixels(mContext,
                         getResources().getDimension(R.dimen.youtube_button_size));
                 RelativeLayout.LayoutParams layoutParams =
                         new RelativeLayout.LayoutParams(buttonDimension, buttonDimension);
-                layoutParams.addRule(RelativeLayout.BELOW, R.id.tv_plot);
 
+                // position
+                layoutParams.addRule(RelativeLayout.BELOW, R.id.tv_plot);
                 int marginStart =
                         Utilities.dpToPixels(mContext,
                         getResources().getDimension(R.dimen.detail_spacing));
                 layoutParams.setMarginStart(marginStart);
-                button.setLayoutParams(layoutParams);
+
+                // associate the defined size and position parameters with the button
+                youtubeIB.setLayoutParams(layoutParams);
 
                 // basic attributes
-                button.setId(View.generateViewId());
-                button.setImageResource(R.drawable.play);
-                button.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                youtubeIB.setId(View.generateViewId());
+                youtubeIB.setImageResource(R.drawable.play);
+                youtubeIB.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
                 // background with ripple effect
                 TypedValue outValue = new TypedValue();
                 mContext.getTheme().resolveAttribute
                         (android.R.attr.selectableItemBackground, outValue, true);
-                button.setBackgroundResource(outValue.resourceId);
+                youtubeIB.setBackgroundResource(outValue.resourceId);
 
-                // add this button to activity_detail
-                mRelativeLayout.addView(button);
+                // add the button to the layout
+                mRelativeLayout.addView(youtubeIB);
 
+                // TODO TextView
+                TextView descriptionTV = new TextView(this);
+
+                // size and position
+                layoutParams = new RelativeLayout.LayoutParams
+                        (ViewGroup.LayoutParams.WRAP_CONTENT, buttonDimension);
+                layoutParams.addRule(RelativeLayout.RIGHT_OF, youtubeIB.getId());
+                layoutParams.addRule(RelativeLayout.ALIGN_TOP, youtubeIB.getId());
+                layoutParams.setMarginStart(marginStart);
+
+                // associate the defined size and position parameters with the textview
+                descriptionTV.setLayoutParams(layoutParams);
+
+                // basic attributes
+                descriptionTV.setId(View.generateViewId());
+                descriptionTV.setText(currentPair.first);
+                descriptionTV.setGravity(Gravity.CENTER_VERTICAL);
+
+                Typeface font = Typeface.createFromAsset(getAssets(), "adamina.ttf");
+                descriptionTV.setTypeface(font);
+
+                // add the textview to the layout
+                mRelativeLayout.addView(descriptionTV);
+
+                // TODO position the poster below everything
                 // move poster image below the trailer video buttons
                 RelativeLayout.LayoutParams posterLayoutParams =
                         (RelativeLayout.LayoutParams) mPosterIV.getLayoutParams();
 
-                posterLayoutParams.addRule(RelativeLayout.BELOW, button.getId());
+                posterLayoutParams.addRule(RelativeLayout.BELOW, youtubeIB.getId());
 
             }
 
