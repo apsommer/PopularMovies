@@ -35,4 +35,8 @@ dependencies {
     // Picasso image downloading and caching library
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
+
+    // Room ORM
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
 }
