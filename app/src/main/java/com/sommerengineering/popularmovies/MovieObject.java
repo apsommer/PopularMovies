@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 import java.io.Serializable;
 
 // custom movie object holds metadata for a specific movie
-@Entity(tableName = "favorites")
+@Entity(tableName = "movies")
 class MovieObject implements Serializable {
 
     // attributes
@@ -15,8 +15,8 @@ class MovieObject implements Serializable {
     private final int mId; // id
 
     private final String mTitle; // title
-    private final String mThumbnailPath; // URL to poster image
-    private final String mPosterPath; // URL to poster image
+    private final String mThumbnailPath; // relative URL to poster image
+    private final String mPosterPath; // relative URL to poster image
     private final String mPlot; // short synopsis of plot
     private final double mRating; // aggregated rating between 1-10
     private final String mDate; // release date
