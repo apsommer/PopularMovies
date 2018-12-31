@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -39,7 +40,8 @@ public class DetailActivity extends AppCompatActivity implements
     private ProgressBar mProgressBar;
     private TextView mPlotTV;
     private ImageView mPosterIV;
-    private int mId;
+    private int mMovieId;
+    private int mViewPositionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,10 @@ public class DetailActivity extends AppCompatActivity implements
         mProgressBar = findViewById(R.id.pb_progress);
 
         // get the movie id
-        mId = movie.getId();
+        mMovieId = movie.getId();
+
+        // set an initial position for the movie videos (optional) and movie reviews (optional)
+        mViewPositionId = R.id.tv_plot;
 
         // set text
         titleTV.setText(movie.getTitle());
@@ -106,13 +111,13 @@ public class DetailActivity extends AppCompatActivity implements
             case VIDEOS_LOADER_ID:
 
                 // build the URL based on user preference for sort order and pass to loader
-                url = Utilities.createVideosUrl(mId);
+                url = Utilities.createVideosUrl(mMovieId);
                 return new DetailsLoader(this, loaderId, url);
 
             case REVIEWS_LOADER_ID:
 
                 // build the URL based on user preference for sort order and pass to loader
-                url = Utilities.createReviewsUrl(mId);
+                url = Utilities.createReviewsUrl(mMovieId);
                 return new DetailsLoader(this, loaderId, url);
 
             // only two possible loader IDs
@@ -123,52 +128,70 @@ public class DetailActivity extends AppCompatActivity implements
 
     // automatically called when loader background thread completes
     @Override
-    public void onLoadFinished(Loader<ArrayList<Pair<String,
-            URL>>> loader, ArrayList<Pair<String, URL>> videos) {
+    public void onLoadFinished
+            (Loader<ArrayList<Pair<String, URL>>> loader, ArrayList<Pair<String, URL>> details) {
 
+        // get the loader id
         int loaderId = loader.getId();
 
-        switch (loaderId) {
+        // check the input exists and is not empty
+        if (details != null && !details.isEmpty()) {
 
-            case VIDEOS_LOADER_ID:
+            // initialize a tuple variable and a reference for the poster imageview position
+            Pair<String, URL> currentPair;
+            RelativeLayout.LayoutParams posterLayoutParams;
 
-                // check the input exists and is not empty
-                if (videos != null && !videos.isEmpty()) {
+            switch (loaderId) {
 
-                    // initialize a tuple variable and set an ID for dynamic positioning
-                    Pair<String, URL> currentPair;
-                    int positioningID = R.id.tv_plot;
+                case VIDEOS_LOADER_ID:
 
                     // loop through the array of video tuples
-                    for (int i = 0; i < videos.size(); i++) {
+                    for (int i = 0; i < details.size(); i++) {
 
                         // currentPair is a tuple containing the video {title, URL}
-                        currentPair = videos.get(i);
+                        currentPair = details.get(i);
                         final String currentTitle = currentPair.first;
                         final URL currentUrl = currentPair.second;
 
                         // each video has a button with the YouTube logo
-                        positioningID = createYoutubeButton(positioningID, currentUrl);
+                        mViewPositionId = createImageButton(R.drawable.play, mViewPositionId, currentUrl);
 
                         // each video has a textview with the video title
-                        createTitleTextView(positioningID, currentTitle);
+                        createDescriptionTextView(mViewPositionId, currentTitle);
 
                     }
 
                     // move poster image below the trailer video buttons
-                    RelativeLayout.LayoutParams posterLayoutParams =
-                            (RelativeLayout.LayoutParams) mPosterIV.getLayoutParams();
+                    posterLayoutParams = (RelativeLayout.LayoutParams) mPosterIV.getLayoutParams();
+                    posterLayoutParams.addRule(RelativeLayout.BELOW, mViewPositionId);
 
-                    posterLayoutParams.addRule(RelativeLayout.BELOW, positioningID);
+                    break;
 
-                }
+                case REVIEWS_LOADER_ID:
 
-                break;
+                    // loop through the array of video tuples
+                    for (int i = 0; i < details.size(); i++) {
 
-            case REVIEWS_LOADER_ID:
+                        // currentPair is a tuple containing the reviews {content, URL}
+                        currentPair = details.get(i);
+                        final String currentContent = currentPair.first;
+                        final URL currentUrl = currentPair.second;
 
-                // TODO do nothing for now
-                break;
+                        // each video has a button with the YouTube logo
+                        mViewPositionId = createImageButton(R.drawable.review, mViewPositionId, currentUrl);
+
+                        // each video has a textview with the video title
+                        createDescriptionTextView(mViewPositionId, currentContent);
+
+                    }
+
+                    // move poster image below the review buttons
+                    posterLayoutParams = (RelativeLayout.LayoutParams) mPosterIV.getLayoutParams();
+                    posterLayoutParams.addRule(RelativeLayout.BELOW, mViewPositionId);
+
+                    break;
+
+            }
 
         }
 
@@ -177,7 +200,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     }
 
-    public int createYoutubeButton(int positioningID, final URL currentUrl) {
+    public int createImageButton(int imageResourceId, int positioningID, final URL currentUrl) {
 
         ImageButton youtubeIB = new ImageButton(this);
 
@@ -204,7 +227,7 @@ public class DetailActivity extends AppCompatActivity implements
         positioningID = youtubeIB.getId();
 
         // set image and scale it
-        youtubeIB.setImageResource(R.drawable.play);
+        youtubeIB.setImageResource(imageResourceId);
         youtubeIB.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         // click opens YouTube (or other media player) via implicit intent
@@ -229,7 +252,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     }
 
-    public void createTitleTextView(int positioningID, final String currentTitle) {
+    public void createDescriptionTextView(int positioningID, final String currentTitle) {
 
         TextView descriptionTV = new TextView(this);
 
@@ -254,6 +277,9 @@ public class DetailActivity extends AppCompatActivity implements
         // basic attributes
         descriptionTV.setText(currentTitle);
         descriptionTV.setGravity(Gravity.CENTER_VERTICAL);
+        descriptionTV.setEllipsize(TextUtils.TruncateAt.END);
+        descriptionTV.setMaxLines(3);
+        descriptionTV.setTextColor(getResources().getColor(R.color.color_black));
 
         // custom font
         Typeface font = Typeface.createFromAsset(getAssets(), "adamina.ttf");
@@ -268,7 +294,7 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     public void onLoaderReset(Loader<ArrayList<Pair<String, URL>>> loader) {
 
-        // TODO do nothing for now
+        // do nothing for now ...
     }
 
 
