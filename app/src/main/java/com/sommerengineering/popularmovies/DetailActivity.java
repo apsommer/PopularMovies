@@ -42,6 +42,7 @@ public class DetailActivity extends AppCompatActivity implements
     private ImageView mPosterIV;
     private int mMovieId;
     private int mViewPositionId;
+    private FavoritesDatabase mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +88,15 @@ public class DetailActivity extends AppCompatActivity implements
         // set rating stars
         ratingRB.setRating((float) movie.getRating());
 
-        // TODO check a SQLite database for "favorites"
-
         // initialize a loader manager to handle a background thread
         LoaderManager loaderManager = getLoaderManager();
 
         // this initialization causes the OS to call onCreateLoader()
         loaderManager.initLoader(VIDEOS_LOADER_ID, null, this);
         loaderManager.initLoader(REVIEWS_LOADER_ID, null, this);
+
+        // get reference to favorites database
+        mDatabase = FavoritesDatabase.getsInstance(mContext);
 
     }
 

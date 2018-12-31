@@ -21,6 +21,16 @@
             android:textStyle="bold"
             tools:text="Original title" />
 
+        <ImageButton
+            android:id="@+id/iv_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/detail_spacing"
+            android:src="@drawable/star"
+            android:background="@null"
+            />
+
         <android.support.v7.widget.AppCompatRatingBar
             android:id="@+id/rb_stars"
             android:layout_below="@id/tv_title"

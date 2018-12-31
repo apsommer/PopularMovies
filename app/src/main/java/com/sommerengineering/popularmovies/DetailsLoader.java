@@ -8,7 +8,7 @@ import android.support.v4.util.Pair;
 import java.net.URL;
 import java.util.ArrayList;
 
-// TODO comments
+// this loader handles API endpoints for both "videos" and "reviews" associated with a specific movie
 class DetailsLoader extends AsyncTaskLoader<ArrayList<Pair<String, URL>>> {
 
     // initialize member variable for URL address

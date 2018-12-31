@@ -30,8 +30,8 @@ final class Utilities {
     // simple tag for log messages
     private static final String LOG_TAG = Utilities.class.getSimpleName();
 
-    // constants TODO https?
-    private static final String THE_MOVIE_DATABASE_BASE_URL = "http://api.themoviedb.org/3/movie/";
+    // constants
+    private static final String THE_MOVIE_DATABASE_BASE_URL = "https://api.themoviedb.org/3/movie/";
     private static final String VIDEOS_ENDPOINT = "/videos";
     private static final String REVIEWS_ENDPOINT = "/reviews";
     private static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=";
