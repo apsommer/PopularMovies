@@ -195,6 +195,9 @@ public class DetailActivity extends AppCompatActivity implements
 
         }
 
+        // prevent an automatic refresh by system during activity onResume()
+        getLoaderManager().destroyLoader(loaderId);
+
         // hide the progress bar
         mProgressBar.setVisibility(View.INVISIBLE);
 
@@ -293,10 +296,7 @@ public class DetailActivity extends AppCompatActivity implements
     // previously created loader is no longer needed and existing data should be discarded
     @Override
     public void onLoaderReset(Loader<ArrayList<Pair<String, URL>>> loader) {
-
         // do nothing for now ...
     }
-
-
 
 }

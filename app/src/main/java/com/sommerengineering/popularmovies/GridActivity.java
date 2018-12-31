@@ -188,6 +188,9 @@ public class GridActivity extends AppCompatActivity implements
 
         }
 
+        // prevent an automatic refresh by system during activity onResume()
+        getLoaderManager().destroyLoader(MOVIES_LOADER_ID);
+
         // hide the progress bar
         mProgressBar.setVisibility(View.INVISIBLE);
 
