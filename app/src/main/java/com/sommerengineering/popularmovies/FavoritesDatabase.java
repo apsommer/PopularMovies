@@ -43,4 +43,6 @@ public abstract class FavoritesDatabase extends RoomDatabase {
         return sInstance;
     }
 
+    public abstract FavoritesDao favoritesDao();
+
 }
