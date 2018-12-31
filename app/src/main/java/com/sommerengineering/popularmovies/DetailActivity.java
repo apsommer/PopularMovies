@@ -30,7 +30,8 @@ public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<Pair<String, URL>>> {
 
     // constants
-    private static final int DETAIL_MOVIE_LOADER_ID = 1;
+    public static final int VIDEOS_LOADER_ID = 1;
+    public static final int REVIEWS_LOADER_ID = 2;
 
     // member variables
     private Context mContext;
@@ -81,29 +82,42 @@ public class DetailActivity extends AppCompatActivity implements
         // set rating stars
         ratingRB.setRating((float) movie.getRating());
 
+        // TODO check a SQLite database for "favorites"
+
         // initialize a loader manager to handle a background thread
         LoaderManager loaderManager = getLoaderManager();
 
         // this initialization causes the OS to call onCreateLoader()
-        loaderManager.initLoader(DETAIL_MOVIE_LOADER_ID, null, this);
+        loaderManager.initLoader(VIDEOS_LOADER_ID, null, this);
+        loaderManager.initLoader(REVIEWS_LOADER_ID, null, this);
 
     }
 
     // automatically called when the loader manager determines that a loader with an id of
-    // DETAIL_MOVIE_LOADER_ID does not exist
+    // VIDEOS_LOADER_ID does not exist
     @Override
-    public Loader<ArrayList<Pair<String, URL>>> onCreateLoader(int id, Bundle args) {
+    public Loader<ArrayList<Pair<String, URL>>> onCreateLoader(int loaderId, Bundle args) {
 
-        // turn on a progress bar
-        mProgressBar.setVisibility(View.VISIBLE);
+        // URL for API endpoint "videos" or "reviews"
+        URL url;
 
-        // TODO check a SQLite database for "favorites"
+        switch (loaderId) {
 
-        // build the URL based on user preference for sort order
-        URL url = Utilities.createVideosUrl(mId);
+            case VIDEOS_LOADER_ID:
 
-        // pass URL to loader
-        return new VideosLoader(this, url);
+                // build the URL based on user preference for sort order and pass to loader
+                url = Utilities.createVideosUrl(mId);
+                return new DetailsLoader(this, loaderId, url);
+
+            case REVIEWS_LOADER_ID:
+
+                // build the URL based on user preference for sort order and pass to loader
+                url = Utilities.createReviewsUrl(mId);
+                return new DetailsLoader(this, loaderId, url);
+
+            // only two possible loader IDs
+            default: return null;
+        }
 
     }
 
@@ -112,40 +126,54 @@ public class DetailActivity extends AppCompatActivity implements
     public void onLoadFinished(Loader<ArrayList<Pair<String,
             URL>>> loader, ArrayList<Pair<String, URL>> videos) {
 
-        // hide the progress bar
-        mProgressBar.setVisibility(View.INVISIBLE);
+        int loaderId = loader.getId();
 
-        // check the input exists and is not empty
-        if (videos != null && !videos.isEmpty()) {
+        switch (loaderId) {
 
-            // initialize a tuple variable and set an ID for dynamic positioning
-            Pair<String, URL> currentPair;
-            int positioningID = R.id.tv_plot;
+            case VIDEOS_LOADER_ID:
 
-            // loop through the array of video tuples
-            for (int i = 0; i < videos.size(); i++) {
+                // check the input exists and is not empty
+                if (videos != null && !videos.isEmpty()) {
 
-                // currentPair is a tuple containing the video {title, URL}
-                currentPair = videos.get(i);
-                final String currentTitle = currentPair.first;
-                final URL currentUrl = currentPair.second;
+                    // initialize a tuple variable and set an ID for dynamic positioning
+                    Pair<String, URL> currentPair;
+                    int positioningID = R.id.tv_plot;
 
-                // each video has a button with the YouTube logo
-                positioningID = createYoutubeButton(positioningID, currentUrl);
+                    // loop through the array of video tuples
+                    for (int i = 0; i < videos.size(); i++) {
 
-                // each video has a textview with the video title
-                createTitleTextView(positioningID, currentTitle);
+                        // currentPair is a tuple containing the video {title, URL}
+                        currentPair = videos.get(i);
+                        final String currentTitle = currentPair.first;
+                        final URL currentUrl = currentPair.second;
 
-            }
+                        // each video has a button with the YouTube logo
+                        positioningID = createYoutubeButton(positioningID, currentUrl);
 
-            // move poster image below the trailer video buttons
-            RelativeLayout.LayoutParams posterLayoutParams =
-                    (RelativeLayout.LayoutParams) mPosterIV.getLayoutParams();
+                        // each video has a textview with the video title
+                        createTitleTextView(positioningID, currentTitle);
 
-            posterLayoutParams.addRule(RelativeLayout.BELOW, positioningID);
+                    }
 
+                    // move poster image below the trailer video buttons
+                    RelativeLayout.LayoutParams posterLayoutParams =
+                            (RelativeLayout.LayoutParams) mPosterIV.getLayoutParams();
+
+                    posterLayoutParams.addRule(RelativeLayout.BELOW, positioningID);
+
+                }
+
+                break;
+
+            case REVIEWS_LOADER_ID:
+
+                // TODO do nothing for now
+                break;
 
         }
+
+        // hide the progress bar
+        mProgressBar.setVisibility(View.INVISIBLE);
 
     }
 

@@ -26,6 +26,6 @@
         android:layout_height="@dimen/progress_bar_dimension"
         android:layout_width="@dimen/progress_bar_dimension"
         android:layout_gravity="center"
-        android:visibility="invisible" />
+        android:visibility="visible" />
 
 </merge>

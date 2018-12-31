@@ -72,7 +72,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentLeft="true"
             android:layout_alignBottom="@id/tv_date"
-            android:visibility="invisible" />
+            android:visibility="visible" />
 
     </RelativeLayout>
 

@@ -43,7 +43,7 @@ final class Utilities {
     private static final String API_KEY = "api_key";
     private static final String api_key = "ae7b929b7942ee2ffc3c8c7d1a7af8cf"; // TODO add API key here
 
-    // create a URL with the given user preference for sort order
+    // create a URL for a set of movies with the given user preference for sort order
     static URL createMoviesUrl(String orderBy) {
 
         // assemble the full query by compiling constituent parts
@@ -72,7 +72,7 @@ final class Utilities {
 
     }
 
-    // create a URL for a specific movie to return ratings and
+    // create a URL for a specific movie to return trailer videos associated with it
     static URL createVideosUrl(int movieId) {
 
         // convert int ID to String
@@ -103,6 +103,12 @@ final class Utilities {
 
         return url;
 
+    }
+
+    // create a URL for a specific movie to return trailer videos associated with it
+    static URL createReviewsUrl(int movieId) {
+        // TODO do nothing for now
+        return null;
     }
 
     // obtain JSON response string from API endpoint
@@ -188,7 +194,7 @@ final class Utilities {
 
     }
 
-    // convert JSON payload to a list of video URLs
+    // convert JSON payload to a list of tuples as {video title, video URL}
     public static ArrayList<Pair<String, URL>> extractVideosFromJson(String responseJson) {
 
         // initialize an empty tuple and arraylist of tuples
@@ -251,7 +257,14 @@ final class Utilities {
 
     }
 
-    // passed to the layout manager of the recycler grid
+    // convert JSON payload to a list of tuples as {video title, video URL}
+    public static ArrayList<Pair<String, URL>> extractReviewsFromJson(String responseJson) {
+        // TODO do nothing for now
+        return null;
+    }
+
+
+        // passed to the layout manager of the recycler grid
     // movie thumbnails will always be (roughly) the same size regardless of device or orientation
     public static int calculateNumberOfColumns(Context context) {
 

@@ -29,7 +29,7 @@ public class GridActivity extends AppCompatActivity implements
 
     // constants
     private static final int TOTAL_NUMBER_OF_MOVIES = 20;
-    private static final int GRID_MOVIE_LOADER_ID = 0;
+    private static final int MOVIES_LOADER_ID = 0;
 
     // member variables
     private MoviesAdapter mAdapter;
@@ -75,7 +75,7 @@ public class GridActivity extends AppCompatActivity implements
             LoaderManager loaderManager = getLoaderManager();
 
             // this initialization causes the OS to call onCreateLoader()
-            loaderManager.initLoader(GRID_MOVIE_LOADER_ID, null, this);
+            loaderManager.initLoader(MOVIES_LOADER_ID, null, this);
 
         }
         else { // no internet connection
@@ -135,7 +135,7 @@ public class GridActivity extends AppCompatActivity implements
     }
 
     // automatically called when the loader manager determines that a loader with an id of
-    // GRID_MOVIE_LOADER_ID does not exist
+    // MOVIES_LOADER_ID does not exist
     @Override
     public Loader<ArrayList<MovieObject>> onCreateLoader(int id, Bundle args) {
 
@@ -166,19 +166,12 @@ public class GridActivity extends AppCompatActivity implements
         // clear the adapter of any previous query results
         mAdapter.clear();
 
-        // hide the progress bar
-        mProgressBar.setVisibility(View.INVISIBLE);
-
         // check the input exists and is not empty
         if (movies != null && !movies.isEmpty()) {
 
             // calling addAll method on the adapter triggers the recycler grid to update
             mAdapter.addAll(movies);
             mAdapter.notifyDataSetChanged();
-            Log.e("apples", movies.toString());
-            Log.e("apples", mAdapter.toString());
-            Toast.makeText(mContext, "Why won't this work first time through? \n" + movies.toString(),
-                    Toast.LENGTH_LONG).show();
 
         }
         else {
@@ -194,6 +187,9 @@ public class GridActivity extends AppCompatActivity implements
             else mErrorTextView.setText(R.string.no_internet_connection);
 
         }
+
+        // hide the progress bar
+        mProgressBar.setVisibility(View.INVISIBLE);
 
     }
 
