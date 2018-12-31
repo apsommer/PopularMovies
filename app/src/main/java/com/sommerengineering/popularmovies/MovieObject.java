@@ -1,12 +1,18 @@
 package com.sommerengineering.popularmovies;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.io.Serializable;
 
 // custom movie object holds metadata for a specific movie
+@Entity(tableName = "favorites")
 class MovieObject implements Serializable {
 
     // attributes
+    @PrimaryKey
     private final int mId; // id
+
     private final String mTitle; // title
     private final String mThumbnailPath; // URL to poster image
     private final String mPosterPath; // URL to poster image
