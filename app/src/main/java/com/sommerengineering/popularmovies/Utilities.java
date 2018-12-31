@@ -33,6 +33,7 @@ final class Utilities {
     // constants TODO https?
     private static final String THE_MOVIE_DATABASE_BASE_URL = "http://api.themoviedb.org/3/movie/";
     private static final String VIDEOS_ENDPOINT = "/videos";
+    private static final String REVIEWS_ENDPOINT = "/reviews";
     private static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=";
 
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
@@ -66,8 +67,6 @@ final class Utilities {
             e.printStackTrace();
         }
 
-        Log.e("~~~~~~~~~~~~~~~~~~~~ ", String.valueOf(url));
-
         return url;
 
     }
@@ -98,17 +97,38 @@ final class Utilities {
             e.printStackTrace();
         }
 
-        Log.e("~~~~~~~~~~~~~~~~~~~~ ", String.valueOf(url));
-        // https://api.themoviedb.org/3/movie/19404/videos?api_key=ae7b929b7942ee2ffc3c8c7d1a7af8cf
-
         return url;
 
     }
 
-    // create a URL for a specific movie to return trailer videos associated with it
+    // create a URL for a specific movie to return reviews associated with it
     static URL createReviewsUrl(int movieId) {
-        // TODO do nothing for now
-        return null;
+
+        // convert int ID to String
+        String id = String.valueOf(movieId);
+
+        // assemble the full query by compiling constituent parts
+        Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL + id + REVIEWS_ENDPOINT);
+
+        // prepare URI for appending the query parameters
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        // append query parameters, for example "api_key=#"
+        uriBuilder.appendQueryParameter(API_KEY, api_key);
+
+        // convert URI to URL and return
+        String uriString = uriBuilder.toString();
+
+        // catch a malformed URL
+        URL url = null;
+        try {
+            url = new URL(uriString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+
     }
 
     // obtain JSON response string from API endpoint
@@ -183,11 +203,9 @@ final class Utilities {
 
             }
 
+        // log exception stack trace
         } catch (JSONException e) {
-
-            // log exception stack trace
-            Log.e(LOG_TAG, "Problem parsing the movie JSON results: ", e);
-
+            Log.e(LOG_TAG, "Problem parsing the movies JSON results: ", e);
         }
 
         return movies;
@@ -246,21 +264,67 @@ final class Utilities {
 
             }
 
+        // log exception stack trace
         } catch (JSONException e) {
-
-            // log exception stack trace
-            Log.e(LOG_TAG, "Problem parsing the movie JSON results: ", e);
-
+            Log.e(LOG_TAG, "Problem parsing the videos JSON results: ", e);
         }
 
         return videos;
 
     }
 
-    // convert JSON payload to a list of tuples as {video title, video URL}
+    // convert JSON payload to a list of tuples as {review title, review URL}
     public static ArrayList<Pair<String, URL>> extractReviewsFromJson(String responseJson) {
-        // TODO do nothing for now
-        return null;
+
+        // initialize an empty tuple and arraylist of tuples
+        Pair<String, URL> pair;
+        ArrayList<Pair<String, URL>> reviews = new ArrayList<>();
+
+        // parse raw JSON response string
+        try {
+
+            // go down one level of JSON payload
+            JSONObject root = new JSONObject(responseJson);
+            JSONArray results = root.getJSONArray("results");
+
+            // loop through results (results = movies)
+            for (int i = 0; i < results.length(); i++) {
+
+                // current movie
+                JSONObject currentResult = results.getJSONObject(i);
+
+                // extract desired metadata from JSON key : value pairs
+                String content = currentResult.getString("content");
+                String urlString = currentResult.getString("url");
+
+                // assemble the full query by compiling constituent parts
+                Uri baseUri = Uri.parse(urlString);
+
+                // convert URI to URL and return
+                String uriString = baseUri.toString();
+
+                // catch a malformed URL
+                URL reviewUrl = null;
+                try {
+                    reviewUrl = new URL(uriString);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+                // each video has a name and a URL, simple tuples
+                pair = new Pair<>(content, reviewUrl);
+
+                // add data to ArrayList
+                reviews.add(pair);
+
+            }
+
+        // log exception stack trace
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Problem parsing the reviews JSON results: ", e);
+        }
+
+        return reviews;
     }
 
 

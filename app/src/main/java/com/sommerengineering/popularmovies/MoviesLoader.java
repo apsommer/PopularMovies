@@ -24,7 +24,7 @@ class MoviesLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
     @Override
     protected void onStartLoading() {
 
-        // required to force the OS to call loadInBackground()
+        // force the OS to call loadInBackground()
         forceLoad();
     }
 

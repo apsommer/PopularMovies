@@ -26,10 +26,10 @@ class DetailsLoader extends AsyncTaskLoader<ArrayList<Pair<String, URL>>> {
 
     }
 
-    @Override // call loadInBackground()
+    @Override
     protected void onStartLoading() {
 
-        // have OS to call loadInBackground()
+        // force the OS to call loadInBackground()
         forceLoad();
     }
 
