@@ -22,6 +22,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.stetho.Stetho;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
@@ -44,6 +45,7 @@ public class DetailActivity extends AppCompatActivity implements
     private int mViewPositionId;
     private ImageButton mFavoritesStarIB;
     private FavoritesDatabase mDatabase;
+    private MovieObject mMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +53,15 @@ public class DetailActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        //
+        Stetho.initializeWithDefaults(this);
+
         // get a reference for the top level context
         mContext = getApplicationContext();
 
         // get movie object packaged with explicit intent
         Intent intent = getIntent();
-        MovieObject movie = (MovieObject) intent.getSerializableExtra("selectedMovie");
+        mMovie = (MovieObject) intent.getSerializableExtra("selectedMovie");
 
         // get references
         mRelativeLayout = findViewById(R.id.rl_container);
@@ -69,15 +74,15 @@ public class DetailActivity extends AppCompatActivity implements
         mFavoritesStarIB = findViewById(R.id.iv_star);
 
         // get the movie id
-        mMovieId = movie.getId();
+        mMovieId = mMovie.getId();
 
         // set an initial position for the movie videos (optional) and movie reviews (optional)
         mViewPositionId = R.id.tv_plot;
 
         // set text
-        titleTV.setText(movie.getTitle());
-        mPlotTV.setText(movie.getPlot());
-        dateTV.setText(Utilities.formatDate(movie.getDate()));
+        titleTV.setText(mMovie.getTitle());
+        mPlotTV.setText(mMovie.getPlot());
+        dateTV.setText(Utilities.formatDate(mMovie.getDate()));
 
         // critical piece!
         // placeholder image must be set for the Picasso library to load correctly on activity start
@@ -85,10 +90,10 @@ public class DetailActivity extends AppCompatActivity implements
                 new ColorDrawable(mContext.getResources().getColor(R.color.color_black));
 
         // set the image view in the grid item layout
-        Picasso.with(mContext).load(movie.getPosterPath()).placeholder(simpleColor).into(mPosterIV);
+        Picasso.with(mContext).load(mMovie.getPosterPath()).placeholder(simpleColor).into(mPosterIV);
 
         // set rating stars
-        ratingRB.setRating((float) movie.getRating());
+        ratingRB.setRating((float) mMovie.getRating());
 
         // initialize a loader manager to handle a background thread
         LoaderManager loaderManager = getLoaderManager();
@@ -101,7 +106,7 @@ public class DetailActivity extends AppCompatActivity implements
         mDatabase = FavoritesDatabase.getsInstance(mContext);
 
         // check if this movie is a user favorite b
-        boolean isFavorite = true; // mMovieId.isFavorite();
+        boolean isFavorite = false; // mMovieId.isFavorite();
 
         // set the appropriate image depending on the favorite status
         if (isFavorite) mFavoritesStarIB.setImageResource(R.drawable.star_filled);
@@ -112,10 +117,7 @@ public class DetailActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 
-                // get state of view as "starred" or "unstarred"
-                boolean isFavorite = true;
-
-                // check
+                mDatabase.favoritesDao().insertFavoriteMovie(mMovie);
 
             }
         });
