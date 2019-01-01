@@ -42,6 +42,7 @@ public class DetailActivity extends AppCompatActivity implements
     private ImageView mPosterIV;
     private int mMovieId;
     private int mViewPositionId;
+    private ImageButton mFavoritesStarIB;
     private FavoritesDatabase mDatabase;
 
     @Override
@@ -65,6 +66,7 @@ public class DetailActivity extends AppCompatActivity implements
         mPosterIV = findViewById(R.id.iv_poster);
         RatingBar ratingRB = findViewById(R.id.rb_stars);
         mProgressBar = findViewById(R.id.pb_progress);
+        mFavoritesStarIB = findViewById(R.id.iv_star);
 
         // get the movie id
         mMovieId = movie.getId();
@@ -97,6 +99,26 @@ public class DetailActivity extends AppCompatActivity implements
 
         // get reference to favorites database
         mDatabase = FavoritesDatabase.getsInstance(mContext);
+
+        // check if this movie is a user favorite b
+        boolean isFavorite = true; // mMovieId.isFavorite();
+
+        // set the appropriate image depending on the favorite status
+        if (isFavorite) mFavoritesStarIB.setImageResource(R.drawable.star_filled);
+        else mFavoritesStarIB.setImageResource(R.drawable.star);
+
+        //
+        mFavoritesStarIB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // get state of view as "starred" or "unstarred"
+                boolean isFavorite = true;
+
+                // check
+
+            }
+        });
 
     }
 
