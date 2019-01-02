@@ -53,7 +53,7 @@ public class DetailActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        //
+        // initialize the Stetho debugging tool
         Stetho.initializeWithDefaults(this);
 
         // get a reference for the top level context

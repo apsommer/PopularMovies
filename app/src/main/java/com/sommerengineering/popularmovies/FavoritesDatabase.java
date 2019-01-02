@@ -35,9 +35,7 @@ public abstract class FavoritesDatabase extends RoomDatabase {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         FavoritesDatabase.class, DATABASE_NAME).allowMainThreadQueries().build();
             }
-        }
-
-        Log.e(LOG_TAG, "Database named 'favorites' already exists, getting it.");
+        } else Log.e(LOG_TAG, "Database named 'favorites' already exists, getting it.");
 
         // this database already exists so return a reference to it
         return sInstance;

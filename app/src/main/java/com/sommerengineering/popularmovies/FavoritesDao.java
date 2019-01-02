@@ -16,7 +16,7 @@ public interface FavoritesDao {
     @Query("SELECT * FROM movies ORDER BY mTitle")
     List<MovieObject> loadAllFavoriteMovies();
 
-    @Insert
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertFavoriteMovie(MovieObject movie);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
