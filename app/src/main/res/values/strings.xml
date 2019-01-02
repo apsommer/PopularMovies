@@ -1,31 +1,18 @@
 <resources>
 
-    <string name="app_name">Popular Movies</string>
+    <!-- top level application name -->
+    <string name="app_name">IMDb Movies</string>
 
     <!-- empty states for recycler grid -->
-    <!-- "&#8230;" is the ellipse character equivalent to three dots "..." -->
-    <string name="no_movies_found">There are no movies from The Movie Database with the specified keywords &#8230; please restart the app to automatically refresh the results.</string>
     <string name="no_internet_connection">There is no internet connection.\n\nTry (1) turning off airplane mode, (2) turning on mobile data or WiFi, (3) checking the signal in your area &#8230; then restart the app to automatically refresh the results.</string>
 
-    <!-- settings menu -->
-    <string name="settings_menu_item">Settings</string>
-    <string name="settings_title">Settings</string>
-
-    <!-- preference "order by" [CHAR LIMIT=30] -->
-    <string name="settings_order_by_label">Order By</string>
-    <string name="settings_order_by_key" translatable="false">order_by</string>
-    <string name="settings_order_by_default" translatable="false">@string/settings_order_by_popular_value</string>
-
-        <!-- order-by "popular" [CHAR LIMIT=20] -->
-        <string name="settings_order_by_popular_label">Popular</string>
-        <string name="settings_order_by_popular_value" translatable="false">popular</string>
-
-        <!-- order-by "rating" [CHAR LIMIT=20] -->
-        <string name="settings_order_by_rating_label">Top Rated</string>
-        <string name="settings_order_by_rating_value" translatable="false">top_rated</string>
+    <!-- preference for API endpoint -->
+    <string name="endpoint_key" translatable="false">order_by</string>
+    <string name="endpoint_default" translatable="false">@string/endpoint_popular</string>
+    <string name="endpoint_popular" translatable="false">popular</string>
+    <string name="endpoint_rating" translatable="false">top_rated</string>
 
     <!-- miscellaneous -->
     <string name="content_description_for_poster_image">Movie poster image</string>
-    <string name="settings_favorites">Favorites</string>
 
 </resources>

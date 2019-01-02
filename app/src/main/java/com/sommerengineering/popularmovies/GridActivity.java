@@ -1,6 +1,5 @@
 package com.sommerengineering.popularmovies;
 
-import android.app.ActionBar;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
@@ -9,18 +8,15 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -93,7 +89,6 @@ public class GridActivity extends AppCompatActivity implements
 
             // the articles list is empty
             mErrorTextView.setVisibility(View.VISIBLE);
-            mErrorTextView.setText(R.string.no_internet_connection);
 
         }
 
@@ -134,7 +129,7 @@ public class GridActivity extends AppCompatActivity implements
                 PreferenceManager.getDefaultSharedPreferences(mContext);
 
         // get "order-by" preference key string
-        String orderByKey = getString(R.string.settings_order_by_key);
+        String orderByKey = getString(R.string.endpoint_key);
 
         // create a preference editor
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -146,7 +141,7 @@ public class GridActivity extends AppCompatActivity implements
 
                 // set the "order-by" preference
                 editor.putString(orderByKey,
-                        getResources().getString(R.string.settings_order_by_popular_value));
+                        getResources().getString(R.string.endpoint_popular));
 
                 // write the new preference to the device
                 editor.apply();
@@ -162,7 +157,7 @@ public class GridActivity extends AppCompatActivity implements
 
                 // set the "order-by" preference
                 editor.putString(orderByKey,
-                        getResources().getString(R.string.settings_order_by_rating_value));
+                        getResources().getString(R.string.endpoint_rating));
 
                 // write the new preference to the device
                 editor.apply();
@@ -183,8 +178,6 @@ public class GridActivity extends AppCompatActivity implements
                 // create a new adapter holding the favorite MovieObjects
                 RecyclerView.Adapter favoritesAdapter =
                         new MoviesAdapter(this, favorites.size(), favorites, this);
-
-                setActionBarTitle("Favorites");
 
                 // associate this new adapter with the recyclerview grid
                 mMovieGrid.setAdapter(favoritesAdapter);
@@ -209,12 +202,9 @@ public class GridActivity extends AppCompatActivity implements
 
         // retrieve user preference for order-by
         // a reference to the default preference is required by getString
-        String orderByKey = getString(R.string.settings_order_by_key);
-        String orderByDefaultValue = getString(R.string.settings_order_by_default);
+        String orderByKey = getString(R.string.endpoint_key);
+        String orderByDefaultValue = getString(R.string.endpoint_default);
         String orderBy = sharedPrefs.getString(orderByKey, orderByDefaultValue);
-
-        // set title of action bar based on user preference for sort order
-        setActionBarTitle(orderBy);
 
         // build the URL based on user preference for sort order
         URL url = Utilities.createMoviesUrl(orderBy);
@@ -222,23 +212,6 @@ public class GridActivity extends AppCompatActivity implements
         // pass URL to loader
         return new MoviesLoader(this, url);
 
-    }
-
-    private void setActionBarTitle(String optionKey) {
-
-        // get reference to action bar
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-
-        String title = "";
-        if (optionKey.equals(getString(R.string.settings_order_by_popular_value))) {
-            title = getString(R.string.settings_order_by_popular_label);
-        } else if (optionKey.equals(getString(R.string.settings_order_by_rating_value))) {
-            title = getString(R.string.settings_order_by_rating_label);
-        } else if (optionKey.equals(getString(R.string.settings_favorites))) {
-            title = getString(R.string.settings_favorites);
-        }
-
-        actionBar.setTitle(title);
     }
 
     // automatically called when loader background thread completes
@@ -254,19 +227,6 @@ public class GridActivity extends AppCompatActivity implements
             // calling addAll method on the adapter triggers the recycler grid to update
             mAdapter.addAll(movies);
             mAdapter.notifyDataSetChanged();
-
-        }
-        else {
-
-            // this conditional handles the rare edge case of the following sequence:
-            // (1) successful network call (2) populate recycler grid
-            // (3) leave app (4) lose internet connection (5) return to app
-            // the movie list is empty because no match with search criteria
-            if (isConnected()) mErrorTextView.setText(R.string.no_movies_found);
-
-            // internet connection was lost after a loader successfully completed
-            // the movie list is empty because there is no internet connection
-            else mErrorTextView.setText(R.string.no_internet_connection);
 
         }
 
