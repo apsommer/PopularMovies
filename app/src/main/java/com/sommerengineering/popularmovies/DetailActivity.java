@@ -107,38 +107,49 @@ public class DetailActivity extends AppCompatActivity implements
         // get reference to favorites database
         mDatabase = FavoritesDatabase.getsInstance(mContext);
 
-        // check if this movie is a user favorite by querying underlying database
-        // set the appropriate image depending on the favorite status
+        // check if this movie is a user specified favorite by querying underlying database
+        // set the appropriate star icon depending on the favorite status
         if (isFavorite()) mFavoritesStarIB.setImageResource(R.drawable.star_filled);
         else mFavoritesStarIB.setImageResource(R.drawable.star);
 
-        //
+        // clicking on the star either inserts a new favorite, or deletes an existing one
         mFavoritesStarIB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                mDatabase.favoritesDao().insertFavoriteMovie(mMovie);
+                // movie is in the favorites list
+                if (isFavorite()) {
+                    mDatabase.favoritesDao().deleteFavoriteMovie(mMovie);
+                    mFavoritesStarIB.setImageResource(R.drawable.star);
+
+                // movie is not in the favorites list
+                } else {
+                    mDatabase.favoritesDao().insertFavoriteMovie(mMovie);
+                    mFavoritesStarIB.setImageResource(R.drawable.star_filled);
+                }
 
             }
         });
 
     }
 
-    //
+    // checks if the movie is in the user defined favorites list
     private boolean isFavorite() {
 
-        //
+        // query database for all movie IDs
         List<Integer> favoriteIds = mDatabase.favoritesDao().loadAllFavoriteIds();
 
-        //
+        // loop through all favorite IDs and compare against this movie ID
         for (int i = 0; i < favoriteIds.size(); i++) {
 
+            // return true since this movie is in the favorites list
             if (favoriteIds.get(i).equals(mId)) {
                 return true;
             }
 
         }
 
+        // return false since this movie is not in the favorites list
         return false;
 
     }
