@@ -71,7 +71,6 @@ public class GridActivity extends AppCompatActivity implements
 
         // the images in the grid will all be the same size
         // explicitly identifying this to the OS allows for performance optimizations
-        // TODO
         mMovieGrid.hasFixedSize();
 
         // get reference to favorites database
@@ -143,13 +142,6 @@ public class GridActivity extends AppCompatActivity implements
         // switch case for each option
         switch (itemId) {
 
-            // explicit intent to start new settings activity
-            case R.id.action_settings:
-
-                Intent settingsIntent = new Intent(this, SettingsActivity.class);
-                startActivity(settingsIntent);
-                return true;
-
             case R.id.action_popular:
 
                 // set the "order-by" preference
@@ -161,6 +153,7 @@ public class GridActivity extends AppCompatActivity implements
 
                 // restart the loader
                 mLoaderManager.restartLoader(MOVIES_LOADER_ID, null, this);
+                mMovieGrid.setAdapter(mAdapter);
 
                 break;
 
@@ -176,19 +169,24 @@ public class GridActivity extends AppCompatActivity implements
 
                 // restart the loader
                 mLoaderManager.restartLoader(MOVIES_LOADER_ID, null, this);
+                mMovieGrid.setAdapter(mAdapter);
 
                 break;
 
 
             case R.id.action_favorites:
 
+                // get the favorites list as MovieObjects
                 ArrayList<MovieObject> favorites =
                         (ArrayList<MovieObject>) mDatabase.favoritesDao().loadAllFavoriteMovies();
 
+                // create a new adapter holding the favorite MovieObjects
                 RecyclerView.Adapter favoritesAdapter =
                         new MoviesAdapter(this, favorites.size(), favorites, this);
 
+                // associate this new adapter with the recyclerview grid
                 mMovieGrid.setAdapter(favoritesAdapter);
+                break;
 
         }
 
