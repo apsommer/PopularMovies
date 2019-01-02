@@ -21,10 +21,11 @@
         <string name="settings_order_by_popular_value" translatable="false">popular</string>
 
         <!-- order-by "rating" [CHAR LIMIT=20] -->
-        <string name="settings_order_by_rating_label">Rating</string>
+        <string name="settings_order_by_rating_label">Top Rated</string>
         <string name="settings_order_by_rating_value" translatable="false">top_rated</string>
 
     <!-- miscellaneous -->
     <string name="content_description_for_poster_image">Movie poster image</string>
+    <string name="settings_favorites">Favorites</string>
 
 </resources>

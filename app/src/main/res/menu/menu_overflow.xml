@@ -7,19 +7,19 @@
 
     <item
         android:id="@+id/action_popular"
-        android:title="Popular"
+        android:title="@string/settings_order_by_popular_label"
         android:orderInCategory="1"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_top_rated"
-        android:title="Top Rated"
+        android:title="@string/settings_order_by_rating_label"
         android:orderInCategory="2"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_favorites"
-        android:title="Favorites"
+        android:title="@string/settings_favorites"
         android:orderInCategory="3"
         app:showAsAction="never" />
 

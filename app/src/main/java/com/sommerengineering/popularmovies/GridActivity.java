@@ -184,6 +184,8 @@ public class GridActivity extends AppCompatActivity implements
                 RecyclerView.Adapter favoritesAdapter =
                         new MoviesAdapter(this, favorites.size(), favorites, this);
 
+                setActionBarTitle("Favorites");
+
                 // associate this new adapter with the recyclerview grid
                 mMovieGrid.setAdapter(favoritesAdapter);
                 break;
@@ -211,12 +213,32 @@ public class GridActivity extends AppCompatActivity implements
         String orderByDefaultValue = getString(R.string.settings_order_by_default);
         String orderBy = sharedPrefs.getString(orderByKey, orderByDefaultValue);
 
+        // set title of action bar based on user preference for sort order
+        setActionBarTitle(orderBy);
+
         // build the URL based on user preference for sort order
         URL url = Utilities.createMoviesUrl(orderBy);
 
         // pass URL to loader
         return new MoviesLoader(this, url);
 
+    }
+
+    private void setActionBarTitle(String optionKey) {
+
+        // get reference to action bar
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+
+        String title = "";
+        if (optionKey.equals(getString(R.string.settings_order_by_popular_value))) {
+            title = getString(R.string.settings_order_by_popular_label);
+        } else if (optionKey.equals(getString(R.string.settings_order_by_rating_value))) {
+            title = getString(R.string.settings_order_by_rating_label);
+        } else if (optionKey.equals(getString(R.string.settings_favorites))) {
+            title = getString(R.string.settings_favorites);
+        }
+
+        actionBar.setTitle(title);
     }
 
     // automatically called when loader background thread completes
