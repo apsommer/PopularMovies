@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<Pair<String, URL>>> {
@@ -41,7 +43,7 @@ public class DetailActivity extends AppCompatActivity implements
     private ProgressBar mProgressBar;
     private TextView mPlotTV;
     private ImageView mPosterIV;
-    private int mMovieId;
+    private int mId;
     private int mViewPositionId;
     private ImageButton mFavoritesStarIB;
     private FavoritesDatabase mDatabase;
@@ -74,7 +76,7 @@ public class DetailActivity extends AppCompatActivity implements
         mFavoritesStarIB = findViewById(R.id.iv_star);
 
         // get the movie id
-        mMovieId = mMovie.getId();
+        mId = mMovie.getId();
 
         // set an initial position for the movie videos (optional) and movie reviews (optional)
         mViewPositionId = R.id.tv_plot;
@@ -105,11 +107,9 @@ public class DetailActivity extends AppCompatActivity implements
         // get reference to favorites database
         mDatabase = FavoritesDatabase.getsInstance(mContext);
 
-        // check if this movie is a user favorite b
-        boolean isFavorite = false; // mMovieId.isFavorite();
-
+        // check if this movie is a user favorite by querying underlying database
         // set the appropriate image depending on the favorite status
-        if (isFavorite) mFavoritesStarIB.setImageResource(R.drawable.star_filled);
+        if (isFavorite()) mFavoritesStarIB.setImageResource(R.drawable.star_filled);
         else mFavoritesStarIB.setImageResource(R.drawable.star);
 
         //
@@ -121,6 +121,25 @@ public class DetailActivity extends AppCompatActivity implements
 
             }
         });
+
+    }
+
+    //
+    private boolean isFavorite() {
+
+        //
+        List<Integer> favoriteIds = mDatabase.favoritesDao().loadAllFavoriteIds();
+
+        //
+        for (int i = 0; i < favoriteIds.size(); i++) {
+
+            if (favoriteIds.get(i).equals(mId)) {
+                return true;
+            }
+
+        }
+
+        return false;
 
     }
 
@@ -137,13 +156,13 @@ public class DetailActivity extends AppCompatActivity implements
             case VIDEOS_LOADER_ID:
 
                 // build the URL based on user preference for sort order and pass to loader
-                url = Utilities.createVideosUrl(mMovieId);
+                url = Utilities.createVideosUrl(mId);
                 return new DetailsLoader(this, loaderId, url);
 
             case REVIEWS_LOADER_ID:
 
                 // build the URL based on user preference for sort order and pass to loader
-                url = Utilities.createReviewsUrl(mMovieId);
+                url = Utilities.createReviewsUrl(mId);
                 return new DetailsLoader(this, loaderId, url);
 
             // only two possible loader IDs

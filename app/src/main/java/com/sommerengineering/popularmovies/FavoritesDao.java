@@ -13,8 +13,11 @@ import java.util.List;
 @Dao
 public interface FavoritesDao {
 
-    @Query("SELECT * FROM movies ORDER BY mTitle")
+    @Query("SELECT * FROM movies ORDER BY mId")
     List<MovieObject> loadAllFavoriteMovies();
+
+    @Query("SELECT mId FROM movies ORDER BY mId")
+    List<Integer> loadAllFavoriteIds();
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertFavoriteMovie(MovieObject movie);
