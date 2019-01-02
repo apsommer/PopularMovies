@@ -1,5 +1,6 @@
 package com.sommerengineering.popularmovies;
 
+import android.app.ActionBar;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -38,6 +40,8 @@ public class GridActivity extends AppCompatActivity implements
     private TextView mErrorTextView;
     private Context mContext;
     private GridLayoutManager mGridLayoutManager;
+    private LoaderManager mLoaderManager;
+    private FavoritesDatabase mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,8 @@ public class GridActivity extends AppCompatActivity implements
         mErrorTextView = findViewById(R.id.tv_error);
 
         // associate the layout manager and adapter to the recycler view
-        mGridLayoutManager = new GridLayoutManager(this, Utilities.calculateNumberOfColumns(mContext));
+        mGridLayoutManager = new GridLayoutManager
+                (this, Utilities.calculateNumberOfColumns(mContext));
         mMovieGrid.setLayoutManager(mGridLayoutManager);
 
         ArrayList<MovieObject> movies = new ArrayList<>();
@@ -66,16 +71,20 @@ public class GridActivity extends AppCompatActivity implements
 
         // the images in the grid will all be the same size
         // explicitly identifying this to the OS allows for performance optimizations
+        // TODO
         mMovieGrid.hasFixedSize();
+
+        // get reference to favorites database
+        mDatabase = FavoritesDatabase.getsInstance(mContext);
 
         // check for internet connectivity
         if (isConnected()) {
 
             // initialize a loader manager to handle a background thread
-            LoaderManager loaderManager = getLoaderManager();
+            mLoaderManager = getLoaderManager();
 
             // this initialization causes the OS to call onCreateLoader()
-            loaderManager.initLoader(MOVIES_LOADER_ID, null, this);
+            mLoaderManager.initLoader(MOVIES_LOADER_ID, null, this);
 
         }
         else { // no internet connection
@@ -105,7 +114,7 @@ public class GridActivity extends AppCompatActivity implements
 
     }
 
-    // initialize overflow menu in top right of Action Bar
+    // overflow menu top right of Action Bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -114,20 +123,73 @@ public class GridActivity extends AppCompatActivity implements
         return true;
     }
 
-    // called when the settings menu is clicked
+    // items within the overflow menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        // get id of menu item
-        int id = item.getItemId();
+        // get id of selected menu item
+        int itemId = item.getItemId();
 
-        // ic_sort icon in top-right of action bar is pressed
-        if (id == R.id.action_settings) {
+        // get reference to device persistent shared preferences
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(mContext);
 
-            // explicit Intent to start new SettingsActivity
-            Intent settingsIntent = new Intent(this, SettingsActivity.class);
-            startActivity(settingsIntent);
-            return true;
+        // get "order-by" preference key string
+        String orderByKey = getString(R.string.settings_order_by_key);
+
+        // create a preference editor
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // switch case for each option
+        switch (itemId) {
+
+            // explicit intent to start new settings activity
+            case R.id.action_settings:
+
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+
+            case R.id.action_popular:
+
+                // set the "order-by" preference
+                editor.putString(orderByKey,
+                        getResources().getString(R.string.settings_order_by_popular_value));
+
+                // write the new preference to the device
+                editor.apply();
+
+                // restart the loader
+                mLoaderManager.restartLoader(MOVIES_LOADER_ID, null, this);
+
+                break;
+
+
+            case R.id.action_top_rated:
+
+                // set the "order-by" preference
+                editor.putString(orderByKey,
+                        getResources().getString(R.string.settings_order_by_rating_value));
+
+                // write the new preference to the device
+                editor.apply();
+
+                // restart the loader
+                mLoaderManager.restartLoader(MOVIES_LOADER_ID, null, this);
+
+                break;
+
+
+            case R.id.action_favorites:
+
+                ArrayList<MovieObject> favorites =
+                        (ArrayList<MovieObject>) mDatabase.favoritesDao().loadAllFavoriteMovies();
+
+                RecyclerView.Adapter favoritesAdapter =
+                        new MoviesAdapter(this, favorites.size(), favorites, this);
+
+                mMovieGrid.setAdapter(favoritesAdapter);
+
         }
 
         // call through to base class to perform the default menu handling
@@ -142,7 +204,7 @@ public class GridActivity extends AppCompatActivity implements
         // show the progress bar
         mProgressBar.setVisibility(View.VISIBLE);
 
-        // get the hardcoded default preferences
+        // get the user defined persistent preferences
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // retrieve user preference for order-by

@@ -3,6 +3,7 @@ package com.sommerengineering.popularmovies;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,6 +106,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
 
+
         // check that movie objects actually exists
         if (mMovies != null && mMovies.size() > 0) {
 
@@ -114,6 +116,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             // call into holder class to update the poster image for this item
             String thumbnailPath = currentMovie.getThumbnailPath();
             holder.bind(thumbnailPath);
+
+            Log.e("~~", currentMovie.toString());
+
         }
 
     }
