@@ -17,7 +17,7 @@ public interface FavoritesDao {
     LiveData<List<Movie>> loadAllFavoriteMovies();
 
     @Query("SELECT mId FROM movies ORDER BY mId")
-    List<Integer> loadAllFavoriteIds();
+    LiveData<List<Integer>> loadAllFavoriteIds();
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertFavoriteMovie(Movie movie);

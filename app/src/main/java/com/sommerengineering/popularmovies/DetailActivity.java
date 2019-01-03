@@ -10,7 +10,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -50,6 +49,9 @@ public class DetailActivity extends AppCompatActivity implements
     private ImageButton mFavoritesStarIB;
     private FavoritesDatabase mDatabase;
     private Movie mMovie;
+    private LiveData<List<Integer>> mFavoritesIds;
+    private Observer<List<Integer>> mObserver;
+    private boolean mIsFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +113,9 @@ public class DetailActivity extends AppCompatActivity implements
 
         // check if this movie is a user specified favorite by querying underlying database
         // set the appropriate star icon depending on the favorite status
-        if (isFavorite()) mFavoritesStarIB.setImageResource(R.drawable.star_filled);
-        else mFavoritesStarIB.setImageResource(R.drawable.star);
+        // TODO
+        mIsFavorite = false;
+        mFavoritesStarIB.setImageResource(R.drawable.star_empty);
 
         // clicking on the star either inserts a new favorite, or deletes an existing one
         mFavoritesStarIB.setOnClickListener(new View.OnClickListener() {
@@ -120,44 +123,53 @@ public class DetailActivity extends AppCompatActivity implements
             public void onClick(View v) {
 
                 // movie is in the favorites list
-                if (isFavorite()) {
+                if (mIsFavorite) {
+
+                    
                     mDatabase.favoritesDao().deleteFavoriteMovie(mMovie);
-                    mFavoritesStarIB.setImageResource(R.drawable.star);
+                    mFavoritesStarIB.setImageResource(R.drawable.star_empty);
+                    mIsFavorite = false;
 
                 // movie is not in the favorites list
                 } else {
                     mDatabase.favoritesDao().insertFavoriteMovie(mMovie);
                     mFavoritesStarIB.setImageResource(R.drawable.star_filled);
+                    mIsFavorite = true;
                 }
 
             }
         });
 
-    }
+        // TODO
+        mFavoritesIds = mDatabase.favoritesDao().loadAllFavoriteIds();
 
-    // checks if the movie is in the user defined favorites list
-    private boolean isFavorite() {
+        // TODO
+        mObserver = new Observer<List<Integer>>() {
+            @Override
+            public void onChanged(List<Integer> favoriteIds) {
 
-        // query database for all movie IDs
-        List<Integer> favoriteIds = (ArrayList<Integer>) mDatabase.favoritesDao().loadAllFavoriteIds();
+                // loop through all favorite IDs and compare against this movie ID
+                for (int i = 0; i < favoriteIds.size(); i++) {
 
-        // loop through all favorite IDs and compare against this movie ID
-        for (int i = 0; i < favoriteIds.size(); i++) {
+                    // return true since this movie is in the favorites list
+                    if (favoriteIds.get(i).equals(mId)) {
+                        mFavoritesStarIB.setImageResource(R.drawable.star_filled);
+                        mIsFavorite = true;
+                    }
 
-            // return true since this movie is in the favorites list
-            if (favoriteIds.get(i).equals(mId)) {
-                return true;
+                }
+
+                //
+                mFavoritesIds.removeObserver(this);
+
             }
+        };
 
-        }
-
-        // return false since this movie is not in the favorites list
-        return false;
+        mFavoritesIds.observe(this, mObserver);
 
     }
 
-    // automatically called when the loader manager determines that a loader with an id of
-    // VIDEOS_LOADER_ID does not exist
+    // automatically called when the loader manager determines this loader ID does not exist
     @Override
     public Loader<ArrayList<Pair<String, URL>>> onCreateLoader(int loaderId, Bundle args) {
 

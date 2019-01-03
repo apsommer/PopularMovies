@@ -202,8 +202,7 @@ public class GridActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    // automatically called when the loader manager determines that a loader with an id of
-    // MOVIES_LOADER_ID does not exist
+    // automatically called when the loader manager determines this loader ID does not exist
     @Override
     public Loader<ArrayList<Movie>> onCreateLoader(int id, Bundle args) {
 
