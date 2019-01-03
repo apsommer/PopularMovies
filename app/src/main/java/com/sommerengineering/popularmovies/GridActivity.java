@@ -1,6 +1,8 @@
 package com.sommerengineering.popularmovies;
 
 import android.app.LoaderManager;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
@@ -9,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GridActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<MovieObject>>,
@@ -62,7 +66,7 @@ public class GridActivity extends AppCompatActivity implements
         mMovieGrid.setLayoutManager(mGridLayoutManager);
 
         ArrayList<MovieObject> movies = new ArrayList<>();
-        mAdapter = new MoviesAdapter(this, TOTAL_NUMBER_OF_MOVIES, movies, this);
+        mAdapter = new MoviesAdapter(this, movies, this);
         mMovieGrid.setAdapter(mAdapter);
 
         // the images in the grid will all be the same size
@@ -172,15 +176,14 @@ public class GridActivity extends AppCompatActivity implements
             case R.id.action_favorites:
 
                 // get the favorites list as MovieObjects
-                ArrayList<MovieObject> favorites =
+                final ArrayList<MovieObject> favorites =
                         (ArrayList<MovieObject>) mDatabase.favoritesDao().loadAllFavoriteMovies();
 
                 // create a new adapter holding the favorite MovieObjects
-                RecyclerView.Adapter favoritesAdapter =
-                        new MoviesAdapter(this, favorites.size(), favorites, this);
+                mAdapter = new MoviesAdapter(this, favorites, this);
 
                 // associate this new adapter with the recyclerview grid
-                mMovieGrid.setAdapter(favoritesAdapter);
+                mMovieGrid.setAdapter(mAdapter);
                 break;
 
         }

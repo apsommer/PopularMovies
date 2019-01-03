@@ -12,21 +12,21 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 
-    // total number of movie items in grid
-    private final int mNumberOfItems;
+    // member variables
     private ArrayList<MovieObject> mMovies;
     private final Context mContext;
     private final MovieAdapterOnClickHandler mClickHandler;
 
     // constructor
-    public MoviesAdapter(Context context, int numberOfItems, ArrayList<MovieObject> movies, MovieAdapterOnClickHandler clickHandler) {
+    public MoviesAdapter(Context context,
+            ArrayList<MovieObject> movies, MovieAdapterOnClickHandler clickHandler) {
 
         // initialize member variables
         mContext = context;
-        mNumberOfItems = numberOfItems;
         mMovies = movies;
         mClickHandler = clickHandler;
 
@@ -87,7 +87,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     @Override
     public int getItemCount() {
-        return mNumberOfItems;
+
+        if (mMovies == null) return 0;
+        return mMovies.size();
+
     }
 
     @Override

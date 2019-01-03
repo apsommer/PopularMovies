@@ -137,7 +137,8 @@ public class DetailActivity extends AppCompatActivity implements
     private boolean isFavorite() {
 
         // query database for all movie IDs
-        List<Integer> favoriteIds = mDatabase.favoritesDao().loadAllFavoriteIds();
+        ArrayList<Integer> favoriteIds =
+                (ArrayList<Integer>) mDatabase.favoritesDao().loadAllFavoriteIds();
 
         // loop through all favorite IDs and compare against this movie ID
         for (int i = 0; i < favoriteIds.size(); i++) {
