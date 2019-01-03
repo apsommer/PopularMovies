@@ -8,25 +8,24 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Dao
 public interface FavoritesDao {
 
     @Query("SELECT * FROM movies ORDER BY mId")
-    List<MovieObject> loadAllFavoriteMovies();
+    LiveData<List<Movie>> loadAllFavoriteMovies();
 
     @Query("SELECT mId FROM movies ORDER BY mId")
     List<Integer> loadAllFavoriteIds();
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insertFavoriteMovie(MovieObject movie);
+    void insertFavoriteMovie(Movie movie);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateFavoriteMovie(MovieObject movie);
+    void updateFavoriteMovie(Movie movie);
 
     @Delete
-    void deleteFavoriteMovie(MovieObject movie);
+    void deleteFavoriteMovie(Movie movie);
 
 }

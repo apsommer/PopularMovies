@@ -1,6 +1,8 @@
 package com.sommerengineering.popularmovies;
 
 import android.app.LoaderManager;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
@@ -8,10 +10,10 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -47,7 +49,7 @@ public class DetailActivity extends AppCompatActivity implements
     private int mViewPositionId;
     private ImageButton mFavoritesStarIB;
     private FavoritesDatabase mDatabase;
-    private MovieObject mMovie;
+    private Movie mMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,7 @@ public class DetailActivity extends AppCompatActivity implements
 
         // get movie object packaged with explicit intent
         Intent intent = getIntent();
-        mMovie = (MovieObject) intent.getSerializableExtra("selectedMovie");
+        mMovie = (Movie) intent.getSerializableExtra("selectedMovie");
 
         // get references
         mRelativeLayout = findViewById(R.id.rl_container);
@@ -137,8 +139,7 @@ public class DetailActivity extends AppCompatActivity implements
     private boolean isFavorite() {
 
         // query database for all movie IDs
-        ArrayList<Integer> favoriteIds =
-                (ArrayList<Integer>) mDatabase.favoritesDao().loadAllFavoriteIds();
+        List<Integer> favoriteIds = (ArrayList<Integer>) mDatabase.favoritesDao().loadAllFavoriteIds();
 
         // loop through all favorite IDs and compare against this movie ID
         for (int i = 0; i < favoriteIds.size(); i++) {

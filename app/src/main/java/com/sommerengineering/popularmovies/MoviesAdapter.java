@@ -12,18 +12,17 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 
     // member variables
-    private ArrayList<MovieObject> mMovies;
+    private ArrayList<Movie> mMovies;
     private final Context mContext;
     private final MovieAdapterOnClickHandler mClickHandler;
 
     // constructor
     public MoviesAdapter(Context context,
-            ArrayList<MovieObject> movies, MovieAdapterOnClickHandler clickHandler) {
+                         ArrayList<Movie> movies, MovieAdapterOnClickHandler clickHandler) {
 
         // initialize member variables
         mContext = context;
@@ -36,7 +35,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public interface MovieAdapterOnClickHandler {
 
         // only one method required to override
-        void onRecyclerItemClick(MovieObject movie);
+        void onRecyclerItemClick(Movie movie);
     }
 
     // critical component of recycler view that allows view caching (memory optimization)
@@ -65,7 +64,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
             // get the clicked movie and pass to the custom handler
             int position = getAdapterPosition();
-            MovieObject movie = mMovies.get(position);
+            Movie movie = mMovies.get(position);
             mClickHandler.onRecyclerItemClick(movie);
 
         }
@@ -114,7 +113,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         if (mMovies != null && mMovies.size() > 0) {
 
             // get current movie
-            MovieObject currentMovie = mMovies.get(position);
+            Movie currentMovie = mMovies.get(position);
 
             // call into holder class to update the poster image for this item
             String thumbnailPath = currentMovie.getThumbnailPath();
@@ -132,7 +131,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     }
 
     // update adapter
-    public void addAll(ArrayList<MovieObject> movies) {
+    public void addAll(ArrayList<Movie> movies) {
         mMovies = movies;
     }
 

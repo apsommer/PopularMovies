@@ -167,10 +167,10 @@ final class Utilities {
     }
 
     // convert JSON payload to a list of custom movie objects
-    public static ArrayList<MovieObject> extractMoviesFromJson(String responseJson) {
+    public static ArrayList<Movie> extractMoviesFromJson(String responseJson) {
 
         // initialize an empty ArrayList
-        ArrayList<MovieObject> movies = new ArrayList<>();
+        ArrayList<Movie> movies = new ArrayList<>();
 
         // parse raw JSON response string
         try {
@@ -199,7 +199,7 @@ final class Utilities {
                 String posterPath = BASE_IMAGE_URL + POSTER_IMAGE_SIZE + relativePosterPath;
 
                 // add data to new movie object and store in ArrayList
-                movies.add(new MovieObject(id, title, thumbnailPath, posterPath, plot, rating, date));
+                movies.add(new Movie(id, title, thumbnailPath, posterPath, plot, rating, date));
 
             }
 

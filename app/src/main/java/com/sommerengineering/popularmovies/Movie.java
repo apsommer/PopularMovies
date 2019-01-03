@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 // custom movie object holds metadata for a specific movie
 @Entity(tableName = "movies")
-class MovieObject implements Serializable {
+class Movie implements Serializable {
 
     // attributes
     @PrimaryKey
@@ -22,7 +22,8 @@ class MovieObject implements Serializable {
     private final String mDate; // release date
 
     // constructor
-    MovieObject(int id, String title, String thumbnailPath, String posterPath, String plot, double rating, String date) {
+    Movie(int id, String title, String thumbnailPath, String posterPath, String plot,
+            double rating, String date) {
 
         mId = id;
         mTitle = title;

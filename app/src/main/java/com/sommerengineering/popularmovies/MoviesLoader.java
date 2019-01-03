@@ -6,7 +6,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 // loads a list of movies and related metadata using an HTTP request on a background thread
-class MoviesLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
+class MoviesLoader extends AsyncTaskLoader<ArrayList<Movie>> {
 
     // initialize member variable for URL address
     private final URL mUrl;
@@ -29,7 +29,7 @@ class MoviesLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
     }
 
     @Override
-    public ArrayList<MovieObject> loadInBackground() {
+    public ArrayList<Movie> loadInBackground() {
 
         // ensure that the URL exists
         if (mUrl == null) {
@@ -38,7 +38,7 @@ class MoviesLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
 
         // perform the HTTP request for movie data and process the JSON response
         String responseJson = Utilities.getResponseFromHttp(mUrl);
-        ArrayList<MovieObject> movies = Utilities.extractMoviesFromJson(responseJson);
+        ArrayList<Movie> movies = Utilities.extractMoviesFromJson(responseJson);
         return movies;
 
     }
