@@ -31,9 +31,8 @@ public abstract class FavoritesDatabase extends RoomDatabase {
                 Log.e(LOG_TAG, "Creating new database named 'favorites'.");
 
                 // create the new database using Room architecture
-                // TODO temporarily allow on main thread
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
-                        FavoritesDatabase.class, DATABASE_NAME).allowMainThreadQueries().build();
+                        FavoritesDatabase.class, DATABASE_NAME).build();
             }
         } else Log.e(LOG_TAG, "Database named 'favorites' already exists, getting it.");
 

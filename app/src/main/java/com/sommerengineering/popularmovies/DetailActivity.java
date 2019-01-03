@@ -30,6 +30,8 @@ import com.squareup.picasso.Picasso;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<Pair<String, URL>>> {
@@ -111,47 +113,66 @@ public class DetailActivity extends AppCompatActivity implements
         // get reference to favorites database
         mDatabase = FavoritesDatabase.getsInstance(mContext);
 
-        // check if this movie is a user specified favorite by querying underlying database
-        // set the appropriate star icon depending on the favorite status
-        // TODO
+        // assume this movie is not a favorite
         mIsFavorite = false;
         mFavoritesStarIB.setImageResource(R.drawable.star_empty);
 
-        // clicking on the star either inserts a new favorite, or deletes an existing one
+        // clicking on the star either inserts a new favorite or deletes an existing one
         mFavoritesStarIB.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+
+                // single thread executor runs on a background thread
+                Executor executor = Executors.newSingleThreadExecutor();
 
                 // movie is in the favorites list
                 if (mIsFavorite) {
 
-                    
-                    mDatabase.favoritesDao().deleteFavoriteMovie(mMovie);
+                    // delete the movie from the database
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDatabase.favoritesDao().deleteFavoriteMovie(mMovie);
+                        }
+                    });
+
+                    // set appropriate image and flag
                     mFavoritesStarIB.setImageResource(R.drawable.star_empty);
                     mIsFavorite = false;
 
                 // movie is not in the favorites list
                 } else {
-                    mDatabase.favoritesDao().insertFavoriteMovie(mMovie);
+
+                    // insert the movie into the database
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDatabase.favoritesDao().insertFavoriteMovie(mMovie);
+                        }
+                    });
+
+                    // set appropriate image and flag
                     mFavoritesStarIB.setImageResource(R.drawable.star_filled);
                     mIsFavorite = true;
                 }
-
             }
         });
 
-        // TODO
+        // livedata list of integer IDs of all favorite movies
         mFavoritesIds = mDatabase.favoritesDao().loadAllFavoriteIds();
 
-        // TODO
+        // define an observer for the favorites ID list
         mObserver = new Observer<List<Integer>>() {
+
+            // only run once on initialization of the livedata
             @Override
             public void onChanged(List<Integer> favoriteIds) {
 
                 // loop through all favorite IDs and compare against this movie ID
                 for (int i = 0; i < favoriteIds.size(); i++) {
 
-                    // return true since this movie is in the favorites list
+                    // set the image and return true since this movie is in the favorites list
                     if (favoriteIds.get(i).equals(mId)) {
                         mFavoritesStarIB.setImageResource(R.drawable.star_filled);
                         mIsFavorite = true;
@@ -159,12 +180,13 @@ public class DetailActivity extends AppCompatActivity implements
 
                 }
 
-                //
+                // remove the observer as the insert and delete methods are handled in onClick()
                 mFavoritesIds.removeObserver(this);
 
             }
         };
 
+        // set the observer on the livedata
         mFavoritesIds.observe(this, mObserver);
 
     }
