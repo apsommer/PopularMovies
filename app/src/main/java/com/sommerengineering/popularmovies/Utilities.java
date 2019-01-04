@@ -30,34 +30,55 @@ final class Utilities {
     // simple tag for log messages
     private static final String LOG_TAG = Utilities.class.getSimpleName();
 
-    // constants
-    private static final String THE_MOVIE_DATABASE_BASE_URL = "https://api.themoviedb.org/3/movie/";
-    public static final String VIDEOS_ENDPOINT = "/videos";
-    public static final String REVIEWS_ENDPOINT = "/reviews";
+    // URL constants
+    private static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
+    private static final String TMDB_SCI_FI_BASE_URL = "https://api.themoviedb.org/3/discover/movie";
+    private static final String TMDB_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=";
 
-    private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
+    // API constants
+    static final String VIDEOS_ENDPOINT = "/videos";
+    static final String REVIEWS_ENDPOINT = "/reviews";
+    private static final String SCI_FI_ENDPOINT = "&sort_by=vote_count.desc&with_genres=878";
+    private static final String API_KEY = "api_key";
+    private static final String api_key_personal = BuildConfig.api_key; // TODO add API key here
+
+    // image modifier constants
     private static final String THUMBNAIL_IMAGE_SIZE = "w342/"; // 92, 154, 185, 342, 500, 780, original
     private static final String POSTER_IMAGE_SIZE = "original";
-
-    // query parameters
-    private static final String API_KEY = "api_key";
-    private static final String api_key = BuildConfig.api_key; // TODO add API key here
 
     // create a URL for a set of movies with the given user preference for sort order
     static URL createMoviesUrl(String orderBy) {
 
         // assemble the full query by compiling constituent parts
-        Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL + orderBy);
+        Uri baseUri = Uri.parse(TMDB_BASE_URL + orderBy);
 
         // prepare URI for appending the query parameters
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        // append query parameters, for example "api_key=#"
-        uriBuilder.appendQueryParameter(API_KEY, api_key);
+        // append query parameters, for example "api_key_personal=#"
+        uriBuilder.appendQueryParameter(API_KEY, api_key_personal);
 
-        // convert URI to URL and return
+        // convert URI to string
         String uriString = uriBuilder.toString();
+
+        // catch a malformed URL
+        URL url = null;
+        try {
+            url = new URL(uriString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+
+    }
+
+    // create a URL for a set of movies with the given user preference for sort order
+    static URL createSciFiUrl() {
+
+        // assemble the full query by concatenating constituent parts
+        String uriString = TMDB_SCI_FI_BASE_URL + "?" + API_KEY + "=" + api_key_personal + SCI_FI_ENDPOINT;
 
         // catch a malformed URL
         URL url = null;
@@ -78,15 +99,15 @@ final class Utilities {
         String id = String.valueOf(movieId);
 
         // assemble the full query by compiling constituent parts
-        Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL + id + endpoint);
+        Uri baseUri = Uri.parse(TMDB_BASE_URL + id + endpoint);
 
         // prepare URI for appending the query parameters
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        // append query parameters, for example "api_key=#"
-        uriBuilder.appendQueryParameter(API_KEY, api_key);
+        // append query parameters, for example "api_key_personal=#"
+        uriBuilder.appendQueryParameter(API_KEY, api_key_personal);
 
-        // convert URI to URL and return
+        // convert URI to string
         String uriString = uriBuilder.toString();
 
         // catch a malformed URL
@@ -165,8 +186,8 @@ final class Utilities {
 
                 // the provided image path is relative
                 // the base URL and size precede the relative path
-                String thumbnailPath = BASE_IMAGE_URL + THUMBNAIL_IMAGE_SIZE + relativePosterPath;
-                String posterPath = BASE_IMAGE_URL + POSTER_IMAGE_SIZE + relativePosterPath;
+                String thumbnailPath = TMDB_BASE_IMAGE_URL + THUMBNAIL_IMAGE_SIZE + relativePosterPath;
+                String posterPath = TMDB_BASE_IMAGE_URL + POSTER_IMAGE_SIZE + relativePosterPath;
 
                 // add data to new movie object and store in ArrayList
                 movies.add(new MovieObject(id, title, thumbnailPath, posterPath, plot, rating, date));

@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -229,12 +228,17 @@ public class MainActivity extends AppCompatActivity implements
         String endpoint = sharedPrefs.getString(endpointKey, endpointDefaultValue);
 
         // build the URL based on user preference
-        URL url = null;
-        if (endpoint.equals("sci_fi")) {
-            Toast.makeText(mContext, "sci_fi hit", Toast.LENGTH_SHORT).show();
-            url = Utilities.createMoviesUrl("popular");
-        } else {
-            url = Utilities.createMoviesUrl(endpoint);
+        URL url;
+        if (endpoint != null) {
+
+            // sci-fi endpoint
+            if (endpoint.equals(getString(R.string.endpoint_sci_fi))) {
+                url = Utilities.createSciFiUrl();
+
+            // top rated or popular endpoints
+            } else {
+                url = Utilities.createMoviesUrl(endpoint);
+            }
         }
 
         // pass URL to loader
