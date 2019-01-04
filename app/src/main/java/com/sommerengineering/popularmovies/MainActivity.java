@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public Loader<ArrayList<MovieObject>> onCreateLoader(int id, Bundle args) {
 
-        // TODO
+        // the loaders are for API endpoints, not favorites
         isViewingFavorites = false;
 
         // show the progress bar

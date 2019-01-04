@@ -2,6 +2,7 @@ package com.sommerengineering.popularmovies;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.util.Pair;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -42,7 +43,7 @@ final class Utilities {
 
     // query parameters
     private static final String API_KEY = "api_key";
-    private static final String api_key = "ae7b929b7942ee2ffc3c8c7d1a7af8cf"; // TODO add API key here
+    private static final String api_key = BuildConfig.api_key; // TODO add API key here
 
     // create a URL for a set of movies with the given user preference for sort order
     static URL createMoviesUrl(String orderBy) {
