@@ -16,13 +16,13 @@ import java.util.ArrayList;
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 
     // member variables
-    private ArrayList<Movie> mMovies;
+    private ArrayList<MovieObject> mMovies;
     private final Context mContext;
     private final MovieAdapterOnClickHandler mClickHandler;
 
     // constructor
     public MoviesAdapter(Context context,
-                         ArrayList<Movie> movies, MovieAdapterOnClickHandler clickHandler) {
+                         ArrayList<MovieObject> movies, MovieAdapterOnClickHandler clickHandler) {
 
         // initialize member variables
         mContext = context;
@@ -35,7 +35,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public interface MovieAdapterOnClickHandler {
 
         // only one method required to override
-        void onRecyclerItemClick(Movie movie);
+        void onRecyclerItemClick(MovieObject movie);
     }
 
     // critical component of recycler view that allows view caching (memory optimization)
@@ -64,7 +64,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
             // get the clicked movie and pass to the custom handler
             int position = getAdapterPosition();
-            Movie movie = mMovies.get(position);
+            MovieObject movie = mMovies.get(position);
             mClickHandler.onRecyclerItemClick(movie);
 
         }
@@ -113,7 +113,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         if (mMovies != null && mMovies.size() > 0) {
 
             // get current movie
-            Movie currentMovie = mMovies.get(position);
+            MovieObject currentMovie = mMovies.get(position);
 
             // call into holder class to update the poster image for this item
             String thumbnailPath = currentMovie.getThumbnailPath();
@@ -131,7 +131,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     }
 
     // update adapter
-    public void addAll(ArrayList<Movie> movies) {
+    public void addAll(ArrayList<MovieObject> movies) {
         mMovies = movies;
     }
 

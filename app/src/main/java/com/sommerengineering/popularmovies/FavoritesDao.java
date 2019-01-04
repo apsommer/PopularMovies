@@ -14,18 +14,18 @@ import java.util.List;
 public interface FavoritesDao {
 
     @Query("SELECT * FROM movies ORDER BY mId")
-    LiveData<List<Movie>> loadAllFavoriteMovies();
+    LiveData<List<MovieObject>> loadAllFavoriteMovies();
 
     @Query("SELECT mId FROM movies ORDER BY mId")
     LiveData<List<Integer>> loadAllFavoriteIds();
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insertFavoriteMovie(Movie movie);
+    void insertFavoriteMovie(MovieObject movie);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateFavoriteMovie(Movie movie);
+    void updateFavoriteMovie(MovieObject movie);
 
     @Delete
-    void deleteFavoriteMovie(Movie movie);
+    void deleteFavoriteMovie(MovieObject movie);
 
 }

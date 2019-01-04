@@ -50,7 +50,7 @@ public class DetailActivity extends AppCompatActivity implements
     private int mViewPositionId;
     private ImageButton mFavoritesStarIB;
     private FavoritesDatabase mDatabase;
-    private Movie mMovie;
+    private MovieObject mMovie;
     private LiveData<List<Integer>> mFavoritesIds;
     private Observer<List<Integer>> mObserver;
     private boolean mIsFavorite;
@@ -69,7 +69,7 @@ public class DetailActivity extends AppCompatActivity implements
 
         // get movie object packaged with explicit intent
         Intent intent = getIntent();
-        mMovie = (Movie) intent.getSerializableExtra("selectedMovie");
+        mMovie = (MovieObject) intent.getSerializableExtra("selectedMovie");
 
         // get references
         mRelativeLayout = findViewById(R.id.rl_container);

@@ -19,7 +19,7 @@
 
         <!-- main activity is a recyclerview grid -->
         <activity
-            android:name=".GridActivity"
+            android:name=".MainActivity"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +33,7 @@
             android:label="Movie Details" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sommerengineering.popularmovies.GridActivity" />
+                android:value="com.sommerengineering.popularmovies.MainActivity" />
         </activity>
 
         <!-- custom font -->

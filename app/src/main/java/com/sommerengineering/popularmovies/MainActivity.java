@@ -11,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,8 +24,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GridActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<ArrayList<Movie>>,
+public class MainActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<ArrayList<MovieObject>>,
         MoviesAdapter.MovieAdapterOnClickHandler {
 
     // constants
@@ -42,8 +41,8 @@ public class GridActivity extends AppCompatActivity implements
     private GridLayoutManager mGridLayoutManager;
     private LoaderManager mLoaderManager;
     private FavoritesDatabase mDatabase;
-    private LiveData<List<Movie>> mFavorites;
-    private Observer<List<Movie>> mObserver;
+    private LiveData<List<MovieObject>> mFavorites;
+    private Observer<List<MovieObject>> mObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +66,7 @@ public class GridActivity extends AppCompatActivity implements
                 (this, Utilities.calculateNumberOfColumns(mContext));
         mMovieGrid.setLayoutManager(mGridLayoutManager);
 
-        ArrayList<Movie> movies = new ArrayList<>();
+        ArrayList<MovieObject> movies = new ArrayList<>();
         mAdapter = new MoviesAdapter(this, movies, this);
         mMovieGrid.setAdapter(mAdapter);
 
@@ -82,10 +81,10 @@ public class GridActivity extends AppCompatActivity implements
         mFavorites = mDatabase.favoritesDao().loadAllFavoriteMovies();
 
         // set an observer on the favorites
-        mObserver = new Observer<List<Movie>>() {
+        mObserver = new Observer<List<MovieObject>>() {
             @Override
-            public void onChanged(List<Movie> favoriteMovies) {
-                mAdapter.addAll((ArrayList<Movie>) favoriteMovies);
+            public void onChanged(List<MovieObject> favoriteMovies) {
+                mAdapter.addAll((ArrayList<MovieObject>) favoriteMovies);
                 mAdapter.notifyDataSetChanged();
             }
         };
@@ -113,7 +112,7 @@ public class GridActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onRecyclerItemClick(Movie movie) {
+    public void onRecyclerItemClick(MovieObject movie) {
 
         // explicit intent for detail activity
         Intent intentToStartDetailActivity = new Intent(this, DetailActivity.class);
@@ -204,7 +203,7 @@ public class GridActivity extends AppCompatActivity implements
 
     // automatically called when the loader manager determines this loader ID does not exist
     @Override
-    public Loader<ArrayList<Movie>> onCreateLoader(int id, Bundle args) {
+    public Loader<ArrayList<MovieObject>> onCreateLoader(int id, Bundle args) {
 
         // show the progress bar
         mProgressBar.setVisibility(View.VISIBLE);
@@ -228,7 +227,7 @@ public class GridActivity extends AppCompatActivity implements
 
     // automatically called when loader background thread completes
     @Override
-    public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> movies) {
+    public void onLoadFinished(Loader<ArrayList<MovieObject>> loader, ArrayList<MovieObject> movies) {
 
         // clear the adapter of any previous query results
         mAdapter.clear();
@@ -252,7 +251,7 @@ public class GridActivity extends AppCompatActivity implements
 
     // previously created loader is no longer needed and existing data should be discarded
     @Override
-    public void onLoaderReset(Loader<ArrayList<Movie>> loader) {
+    public void onLoaderReset(Loader<ArrayList<MovieObject>> loader) {
 
         // removing all data from adapter automatically clears the UI listview
         mMovieGrid.setAdapter(null);
