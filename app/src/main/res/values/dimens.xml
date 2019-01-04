@@ -13,5 +13,5 @@
 
     <!-- imagebutton size -->
     <dimen name="button">48dp</dimen>
-    
+
 </resources>

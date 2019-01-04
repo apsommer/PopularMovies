@@ -18,9 +18,15 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_sci_fi"
+        android:title="@string/sci_fi_label"
+        android:orderInCategory="3"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_favorites"
         android:title="@string/favorites_label"
-        android:orderInCategory="3"
+        android:orderInCategory="4"
         app:showAsAction="never" />
 
 </menu>

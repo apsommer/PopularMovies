@@ -7,16 +7,20 @@
     <string name="no_internet_connection">There is no internet connection.\n\nTry (1) turning off airplane mode, (2) turning on mobile data or WiFi, (3) checking the signal in your area &#8230; then restart the app to automatically refresh the results.</string>
 
     <!-- preference for API endpoint -->
-    <string name="endpoint_key" translatable="false">order_by</string>
+    <string name="endpoint_key" translatable="false">endpoint</string>
     <string name="endpoint_default" translatable="false">@string/endpoint_popular</string>
     <string name="endpoint_popular" translatable="false">popular</string>
     <string name="endpoint_rating" translatable="false">top_rated</string>
+    <string name="endpoint_sci_fi" translatable="false">sci_fi</string>
 
-    <!-- miscellaneous -->
+    <!-- content descriptions -->
     <string name="content_description_for_poster_image">Movie poster image</string>
     <string name="iv_star_content_description">Open or closed star icon indicates if this movie is a favorite, or not.</string>
+
+    <!-- overflow menu item labels -->
     <string name="popular_label">Popular</string>
     <string name="top_rated_label">Top Rated</string>
+    <string name="sci_fi_label">Sci Fi</string>
     <string name="favorites_label">Favorites</string>
 
 </resources>

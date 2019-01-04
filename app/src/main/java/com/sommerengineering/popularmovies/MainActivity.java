@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements
 
             case R.id.action_popular:
 
-                // set the "order-by" preference
+                // set the "endpoint" preference
                 editor.putString(orderByKey,
                         getResources().getString(R.string.endpoint_popular));
 
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements
 
             case R.id.action_top_rated:
 
-                // set the "order-by" preference
+                // set the "endpoint" preference
                 editor.putString(orderByKey,
                         getResources().getString(R.string.endpoint_rating));
 
@@ -179,6 +180,19 @@ public class MainActivity extends AppCompatActivity implements
 
                 break;
 
+            case R.id.action_sci_fi:
+
+                // set the "endpoint" preference
+                editor.putString(orderByKey,
+                        getResources().getString(R.string.endpoint_sci_fi));
+
+                // write the new preference to the device
+                editor.apply();
+
+                // restart the loader
+                mLoaderManager.restartLoader(MOVIES_LOADER_ID, null, this);
+
+                break;
 
             case R.id.action_favorites:
 
@@ -208,14 +222,20 @@ public class MainActivity extends AppCompatActivity implements
         // get the user defined persistent preferences
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // retrieve user preference for order-by
+        // retrieve user preference that represents API endpoint
         // a reference to the default preference is required by getString
-        String orderByKey = getString(R.string.endpoint_key);
-        String orderByDefaultValue = getString(R.string.endpoint_default);
-        String orderBy = sharedPrefs.getString(orderByKey, orderByDefaultValue);
+        String endpointKey = getString(R.string.endpoint_key);
+        String endpointDefaultValue = getString(R.string.endpoint_default);
+        String endpoint = sharedPrefs.getString(endpointKey, endpointDefaultValue);
 
-        // build the URL based on user preference for sort order
-        URL url = Utilities.createMoviesUrl(orderBy);
+        // build the URL based on user preference
+        URL url = null;
+        if (endpoint.equals("sci_fi")) {
+            Toast.makeText(mContext, "sci_fi hit", Toast.LENGTH_SHORT).show();
+            url = Utilities.createMoviesUrl("popular");
+        } else {
+            url = Utilities.createMoviesUrl(endpoint);
+        }
 
         // pass URL to loader
         return new MoviesLoader(this, url);
