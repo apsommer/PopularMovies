@@ -3,6 +3,7 @@ package com.sommerengineering.popularmovies;
 import android.app.LoaderManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
@@ -34,13 +35,12 @@ public class MainActivity extends AppCompatActivity implements
 
     // member variables
     private MoviesAdapter mAdapter;
-    private RecyclerView mMovieGrid;
+    private RecyclerView mRecyclerGrid;
     private ProgressBar mProgressBar;
     private TextView mErrorTextView;
     private Context mContext;
     private GridLayoutManager mGridLayoutManager;
     private LoaderManager mLoaderManager;
-    private FavoritesDatabase mDatabase;
     private LiveData<List<MovieObject>> mFavorites;
     private Observer<List<MovieObject>> mObserver;
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements
         mContext = getApplicationContext();
 
         // setup the recycler view and adapter
-        mMovieGrid = findViewById(R.id.rv_recycler);
+        mRecyclerGrid = findViewById(R.id.rv_recycler);
 
         // get references to the indicator widgets
         mProgressBar = findViewById(R.id.pb_progress);
@@ -64,21 +64,21 @@ public class MainActivity extends AppCompatActivity implements
         // associate the layout manager and adapter to the recycler view
         mGridLayoutManager = new GridLayoutManager
                 (this, Utilities.calculateNumberOfColumns(mContext));
-        mMovieGrid.setLayoutManager(mGridLayoutManager);
+        mRecyclerGrid.setLayoutManager(mGridLayoutManager);
 
         ArrayList<MovieObject> movies = new ArrayList<>();
         mAdapter = new MoviesAdapter(this, movies, this);
-        mMovieGrid.setAdapter(mAdapter);
+        mRecyclerGrid.setAdapter(mAdapter);
 
         // the images in the grid will all be the same size
         // explicitly identifying this to the OS allows for performance optimizations
-        mMovieGrid.hasFixedSize();
+        mRecyclerGrid.hasFixedSize();
 
-        // get reference to favorites database
-        mDatabase = FavoritesDatabase.getsInstance(mContext);
+        // handle database operations in a viewmodel
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         // get the favorites as movie objects
-        mFavorites = mDatabase.favoritesDao().loadAllFavoriteMovies();
+        mFavorites = viewModel.getFavorites();
 
         // set an observer on the favorites
         mObserver = new Observer<List<MovieObject>>() {
@@ -89,25 +89,21 @@ public class MainActivity extends AppCompatActivity implements
             }
         };
 
-        // check for internet connectivity
+        // if connected to the internet initialize a background loader
         if (isConnected()) {
-
-            // initialize a loader manager to handle a background thread
             mLoaderManager = getLoaderManager();
-
-            // this initialization causes the OS to call onCreateLoader()
             mLoaderManager.initLoader(MOVIES_LOADER_ID, null, this);
-
         }
-        else { // no internet connection
 
-            // hide the progress bar
+        // no internet connection
+        else {
             mProgressBar.setVisibility(View.INVISIBLE);
-
-            // the articles list is empty
             mErrorTextView.setVisibility(View.VISIBLE);
-
         }
+
+    }
+
+    private void setupViewModel() {
 
     }
 
@@ -254,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoaderReset(Loader<ArrayList<MovieObject>> loader) {
 
         // removing all data from adapter automatically clears the UI listview
-        mMovieGrid.setAdapter(null);
+        mRecyclerGrid.setAdapter(null);
     }
 
     // check status of internet connectivity
