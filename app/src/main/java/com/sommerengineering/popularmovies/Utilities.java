@@ -32,8 +32,8 @@ final class Utilities {
 
     // constants
     private static final String THE_MOVIE_DATABASE_BASE_URL = "https://api.themoviedb.org/3/movie/";
-    private static final String VIDEOS_ENDPOINT = "/videos";
-    private static final String REVIEWS_ENDPOINT = "/reviews";
+    public static final String VIDEOS_ENDPOINT = "/videos";
+    public static final String REVIEWS_ENDPOINT = "/reviews";
     private static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=";
 
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
@@ -72,43 +72,13 @@ final class Utilities {
     }
 
     // create a URL for a specific movie to return trailer videos associated with it
-    static URL createVideosUrl(int movieId) {
+    static URL createDetailsUrl(int movieId, String endpoint) {
 
         // convert int ID to String
         String id = String.valueOf(movieId);
 
         // assemble the full query by compiling constituent parts
-        Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL + id + VIDEOS_ENDPOINT);
-
-        // prepare URI for appending the query parameters
-        Uri.Builder uriBuilder = baseUri.buildUpon();
-
-        // append query parameters, for example "api_key=#"
-        uriBuilder.appendQueryParameter(API_KEY, api_key);
-
-        // convert URI to URL and return
-        String uriString = uriBuilder.toString();
-
-        // catch a malformed URL
-        URL url = null;
-        try {
-            url = new URL(uriString);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        return url;
-
-    }
-
-    // create a URL for a specific movie to return reviews associated with it
-    static URL createReviewsUrl(int movieId) {
-
-        // convert int ID to String
-        String id = String.valueOf(movieId);
-
-        // assemble the full query by compiling constituent parts
-        Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL + id + REVIEWS_ENDPOINT);
+        Uri baseUri = Uri.parse(THE_MOVIE_DATABASE_BASE_URL + id + endpoint);
 
         // prepare URI for appending the query parameters
         Uri.Builder uriBuilder = baseUri.buildUpon();

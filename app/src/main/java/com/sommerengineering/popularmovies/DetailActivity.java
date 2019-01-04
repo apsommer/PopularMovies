@@ -191,23 +191,22 @@ public class DetailActivity extends AppCompatActivity implements
         // URL for API endpoint "videos" or "reviews"
         URL url;
 
+        // build the URL based on user preference for endpoint
         switch (loaderId) {
 
             case VIDEOS_LOADER_ID:
-
-                // build the URL based on user preference for sort order and pass to loader
-                url = Utilities.createVideosUrl(mId);
-                return new DetailsLoader(this, loaderId, url);
+                url = Utilities.createDetailsUrl(mId, Utilities.VIDEOS_ENDPOINT);
+                break;
 
             case REVIEWS_LOADER_ID:
-
-                // build the URL based on user preference for sort order and pass to loader
-                url = Utilities.createReviewsUrl(mId);
-                return new DetailsLoader(this, loaderId, url);
+                url = Utilities.createDetailsUrl(mId, Utilities.REVIEWS_ENDPOINT);
+                break;
 
             // only two possible loader IDs
             default: return null;
         }
+
+        return new DetailsLoader(this, loaderId, url);
 
     }
 
