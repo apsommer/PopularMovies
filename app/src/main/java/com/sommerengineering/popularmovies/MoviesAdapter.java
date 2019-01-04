@@ -119,8 +119,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             String thumbnailPath = currentMovie.getThumbnailPath();
             holder.bind(thumbnailPath);
 
-            Log.e("~~", currentMovie.toString());
-
         }
 
     }

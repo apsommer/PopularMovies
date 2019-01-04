@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements
         MoviesAdapter.MovieAdapterOnClickHandler {
 
     // constants
-    private static final int TOTAL_NUMBER_OF_MOVIES = 20;
     private static final int MOVIES_LOADER_ID = 0;
 
     // member variables
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements
     private LoaderManager mLoaderManager;
     private LiveData<List<MovieObject>> mFavorites;
     private Observer<List<MovieObject>> mObserver;
+    private boolean isViewingFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +67,12 @@ public class MainActivity extends AppCompatActivity implements
                 (this, Utilities.calculateNumberOfColumns(mContext));
         mRecyclerGrid.setLayoutManager(mGridLayoutManager);
 
-        ArrayList<MovieObject> movies = new ArrayList<>();
-        mAdapter = new MoviesAdapter(this, movies, this);
-        mRecyclerGrid.setAdapter(mAdapter);
+        // initialize the adapter
+        if (mAdapter == null) {
+            ArrayList<MovieObject> movies = new ArrayList<>();
+            mAdapter = new MoviesAdapter(this, movies, this);
+            mRecyclerGrid.setAdapter(mAdapter);
+        }
 
         // the images in the grid will all be the same size
         // explicitly identifying this to the OS allows for performance optimizations
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements
         // get the favorites as movie objects
         mFavorites = viewModel.getFavorites();
 
-        // set an observer on the favorites
+        // define an observer on the favorite movie list
         mObserver = new Observer<List<MovieObject>>() {
             @Override
             public void onChanged(List<MovieObject> favoriteMovies) {
@@ -93,17 +97,12 @@ public class MainActivity extends AppCompatActivity implements
         if (isConnected()) {
             mLoaderManager = getLoaderManager();
             mLoaderManager.initLoader(MOVIES_LOADER_ID, null, this);
-        }
 
         // no internet connection
-        else {
+        } else if (!isConnected()) {
             mProgressBar.setVisibility(View.INVISIBLE);
             mErrorTextView.setVisibility(View.VISIBLE);
         }
-
-    }
-
-    private void setupViewModel() {
 
     }
 
@@ -188,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements
                 // this method triggers the observer onChange() defined in onCreate()
                 // this properly updating the UI while viewing the favorites list
                 mFavorites.observe(this, mObserver);
+                isViewingFavorites = true;
 
                 break;
 
@@ -200,6 +200,9 @@ public class MainActivity extends AppCompatActivity implements
     // automatically called when the loader manager determines this loader ID does not exist
     @Override
     public Loader<ArrayList<MovieObject>> onCreateLoader(int id, Bundle args) {
+
+        // TODO
+        isViewingFavorites = false;
 
         // show the progress bar
         mProgressBar.setVisibility(View.VISIBLE);
@@ -225,20 +228,25 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<ArrayList<MovieObject>> loader, ArrayList<MovieObject> movies) {
 
+        Log.e("~~", "onLoadFinished");
+
+        // onLoadFinished() is called by the system on lifecycle event onResume()
+        // if the user is view favorites then do not repopulate the adapter with the loader results
+        if (isViewingFavorites) {
+            return;
+        }
+
         // clear the adapter of any previous query results
         mAdapter.clear();
 
         // check the input exists and is not empty
         if (movies != null && !movies.isEmpty()) {
 
-            // calling addAll method on the adapter triggers the recycler grid to update
+            // add all the movies retrieved by the loader and notify the recyclerview grid
             mAdapter.addAll(movies);
             mAdapter.notifyDataSetChanged();
 
         }
-
-        // prevent an automatic refresh by system during activity onResume()
-        getLoaderManager().destroyLoader(MOVIES_LOADER_ID);
 
         // hide the progress bar
         mProgressBar.setVisibility(View.INVISIBLE);

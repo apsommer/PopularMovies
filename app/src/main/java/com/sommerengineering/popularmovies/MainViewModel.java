@@ -11,6 +11,9 @@ public class MainViewModel extends AndroidViewModel {
     // list of custom movies objects
     private LiveData<List<MovieObject>> mFavorites;
 
+    // flag for if the user is viewing the favorites list, handles configuration change
+    private boolean mIsViewingFavorites;
+
     // constructor sets list of custom movie objects from database
     public MainViewModel(Application application) {
         super(application);
@@ -18,9 +21,17 @@ public class MainViewModel extends AndroidViewModel {
         mFavorites = database.favoritesDao().loadAllFavoriteMovies();
     }
 
-    // getter
+    // getters
     public LiveData<List<MovieObject>> getFavorites() {
         return mFavorites;
+    }
+    public boolean getIsViewingFavorites() {
+        return mIsViewingFavorites;
+    }
+
+    // setters
+    public void setIsViewingFavorites(boolean isViewingFavorites) {
+        mIsViewingFavorites = isViewingFavorites;
     }
 
 }

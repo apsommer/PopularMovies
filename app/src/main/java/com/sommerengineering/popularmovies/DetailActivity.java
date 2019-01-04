@@ -3,6 +3,7 @@ package com.sommerengineering.popularmovies;
 import android.app.LoaderManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -110,12 +112,37 @@ public class DetailActivity extends AppCompatActivity implements
         loaderManager.initLoader(VIDEOS_LOADER_ID, null, this);
         loaderManager.initLoader(REVIEWS_LOADER_ID, null, this);
 
-        // get reference to favorites database
-        mDatabase = FavoritesDatabase.getsInstance(mContext);
+        // handle database operations in a viewmodel
+        DetailViewModel viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
 
-        // assume this movie is not a favorite
-        mIsFavorite = false;
-        mFavoritesStarIB.setImageResource(R.drawable.star_empty);
+        // get reference to favorites database
+        mDatabase = viewModel.getDatabase();
+
+        // livedata list of integer IDs of all favorite movies
+        mFavoritesIds = viewModel.getFavoritesIds();
+
+        // define an anonymous observer for the list of favorites IDs
+        mObserver = new Observer<List<Integer>>() {
+
+            @Override
+            public void onChanged(List<Integer> favoriteIds) {
+
+                // loop through all favorite IDs and compare against this movie ID
+                for (int i = 0; i < favoriteIds.size(); i++) {
+
+                    // set the image and flag to true since this movie is in the favorites list
+                    if (favoriteIds.get(i).equals(mId)) {
+                        mFavoritesStarIB.setImageResource(R.drawable.star_filled);
+                        mIsFavorite = true;
+                    }
+
+                }
+
+            }
+        };
+
+        // set the observer on the livedata
+        mFavoritesIds.observe(this, mObserver);
 
         // clicking on the star either inserts a new favorite or deletes an existing one
         mFavoritesStarIB.setOnClickListener(new View.OnClickListener() {
@@ -158,36 +185,6 @@ public class DetailActivity extends AppCompatActivity implements
                 }
             }
         });
-
-        // livedata list of integer IDs of all favorite movies
-        mFavoritesIds = mDatabase.favoritesDao().loadAllFavoriteIds();
-
-        // define an observer for the favorites ID list
-        mObserver = new Observer<List<Integer>>() {
-
-            // only run once on initialization of the livedata
-            @Override
-            public void onChanged(List<Integer> favoriteIds) {
-
-                // loop through all favorite IDs and compare against this movie ID
-                for (int i = 0; i < favoriteIds.size(); i++) {
-
-                    // set the image and return true since this movie is in the favorites list
-                    if (favoriteIds.get(i).equals(mId)) {
-                        mFavoritesStarIB.setImageResource(R.drawable.star_filled);
-                        mIsFavorite = true;
-                    }
-
-                }
-
-                // remove the observer as the insert and delete methods are handled in onClick()
-                mFavoritesIds.removeObserver(this);
-
-            }
-        };
-
-        // set the observer on the livedata
-        mFavoritesIds.observe(this, mObserver);
 
     }
 
