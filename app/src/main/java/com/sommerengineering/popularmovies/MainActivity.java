@@ -229,16 +229,14 @@ public class MainActivity extends AppCompatActivity implements
 
         // build the URL based on user preference
         URL url;
-        if (endpoint != null) {
 
-            // sci-fi endpoint
-            if (endpoint.equals(getString(R.string.endpoint_sci_fi))) {
-                url = Utilities.createSciFiUrl();
+        // sci-fi endpoint
+        if (endpoint.equals(getString(R.string.endpoint_sci_fi))) {
+            url = Utilities.createSciFiUrl();
 
-            // top rated or popular endpoints
-            } else {
-                url = Utilities.createMoviesUrl(endpoint);
-            }
+        // top rated or popular endpoints
+        } else {
+            url = Utilities.createMoviesUrl(endpoint);
         }
 
         // pass URL to loader
