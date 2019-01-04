@@ -17,14 +17,14 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/empty_state_spacing"
         android:text="@string/no_internet_connection"
-        android:textSize="@dimen/empty_state_text_size"
+        android:textSize="@dimen/empty_state_text"
         android:visibility="invisible"
         android:layout_gravity="center" />
 
     <ProgressBar
         android:id="@+id/pb_progress"
-        android:layout_height="@dimen/progress_bar_dimension"
-        android:layout_width="@dimen/progress_bar_dimension"
+        android:layout_height="@dimen/progress_bar"
+        android:layout_width="@dimen/progress_bar"
         android:layout_gravity="center"
         android:visibility="visible" />
 

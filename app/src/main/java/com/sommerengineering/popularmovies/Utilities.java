@@ -2,7 +2,6 @@ package com.sommerengineering.popularmovies;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v4.util.Pair;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -328,21 +327,22 @@ final class Utilities {
         return reviews;
     }
 
-
-        // passed to the layout manager of the recycler grid
-    // movie thumbnails will always be (roughly) the same size regardless of device or orientation
+    // passed to the layout manager of the recycler grid
+    // thumbnails will always be approximately the same physical size regardless of device or orientation
     public static int calculateNumberOfColumns(Context context) {
 
-        // get the device screen dimensions
+        // get the current device screen dimensions
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
-        // device width in dp
+        // get current device width in dp
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
 
-        // number of columns
-        // 180 is the magic number ... recall that 160 dp = 1 inch
-        int numberOfColumns = (int) (dpWidth / 180);
-        return numberOfColumns;
+        // conversion is 160 dp = 1 inch
+        float itemWidth = context.getResources().getInteger(R.integer.grid_item);
+
+        // number of columns is how many R.dimen.button can fit in this device width
+        return (int) (dpWidth / itemWidth);
+
     }
 
     // coverts datetime timestamp to simple date only format

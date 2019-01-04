@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -46,15 +45,12 @@ public class DetailActivity extends AppCompatActivity implements
     private Context mContext;
     private RelativeLayout mRelativeLayout;
     private ProgressBar mProgressBar;
-    private TextView mPlotTV;
     private ImageView mPosterIV;
     private int mId;
     private int mViewPositionId;
     private ImageButton mFavoritesStarIB;
     private FavoritesDatabase mDatabase;
     private MovieObject mMovie;
-    private LiveData<List<Integer>> mFavoritesIds;
-    private Observer<List<Integer>> mObserver;
     private boolean mIsFavorite;
 
     @Override
@@ -76,7 +72,7 @@ public class DetailActivity extends AppCompatActivity implements
         // get references
         mRelativeLayout = findViewById(R.id.rl_container);
         TextView titleTV = findViewById(R.id.tv_title);
-        mPlotTV = findViewById(R.id.tv_plot);
+        TextView mPlotTV = findViewById(R.id.tv_plot);
         TextView dateTV = findViewById(R.id.tv_date);
         mPosterIV = findViewById(R.id.iv_poster);
         RatingBar ratingRB = findViewById(R.id.rb_stars);
@@ -119,10 +115,10 @@ public class DetailActivity extends AppCompatActivity implements
         mDatabase = viewModel.getDatabase();
 
         // livedata list of integer IDs of all favorite movies
-        mFavoritesIds = viewModel.getFavoritesIds();
+        LiveData<List<Integer>> mFavoritesIds = viewModel.getFavoritesIds();
 
         // define an anonymous observer for the list of favorites IDs
-        mObserver = new Observer<List<Integer>>() {
+        Observer<List<Integer>> mObserver = new Observer<List<Integer>>() {
 
             @Override
             public void onChanged(List<Integer> favoriteIds) {
@@ -292,14 +288,14 @@ public class DetailActivity extends AppCompatActivity implements
 
     }
 
-    public int createImageButton(int imageResourceId, int positioningID, final URL currentUrl) {
+    private int createImageButton(int imageResourceId, int positioningID, final URL currentUrl) {
 
-        ImageButton youtubeIB = new ImageButton(this);
+        ImageButton imageButton = new ImageButton(this);
 
         // size
         int buttonDimension =
                 Utilities.dpToPixels(mContext,
-                        getResources().getDimension(R.dimen.youtube_button_size));
+                        getResources().getDimension(R.dimen.button));
         RelativeLayout.LayoutParams layoutParams =
                 new RelativeLayout.LayoutParams(buttonDimension, buttonDimension);
 
@@ -310,20 +306,20 @@ public class DetailActivity extends AppCompatActivity implements
         layoutParams.setMarginStart(marginStart);
 
         // associate the defined size and position parameters with the button
-        youtubeIB.setLayoutParams(layoutParams);
+        imageButton.setLayoutParams(layoutParams);
 
         // let the system create an ID, then get it
-        youtubeIB.setId(View.generateViewId());
+        imageButton.setId(View.generateViewId());
 
         // update ID reference for positioning of (potential) subsequent buttons
-        positioningID = youtubeIB.getId();
+        positioningID = imageButton.getId();
 
         // set image and scale it
-        youtubeIB.setImageResource(imageResourceId);
-        youtubeIB.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageButton.setImageResource(imageResourceId);
+        imageButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         // click opens YouTube (or other media player) via implicit intent
-        youtubeIB.setOnClickListener(new View.OnClickListener() {
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentUrl.toString()));
@@ -335,22 +331,22 @@ public class DetailActivity extends AppCompatActivity implements
         TypedValue outValue = new TypedValue();
         mContext.getTheme().resolveAttribute
                 (android.R.attr.selectableItemBackground, outValue, true);
-        youtubeIB.setBackgroundResource(outValue.resourceId);
+        imageButton.setBackgroundResource(outValue.resourceId);
 
         // add button to the layout
-        mRelativeLayout.addView(youtubeIB);
+        mRelativeLayout.addView(imageButton);
 
         return positioningID;
 
     }
 
-    public void createDescriptionTextView(int positioningID, final String currentTitle) {
+    private void createDescriptionTextView(int positioningID, final String currentTitle) {
 
         TextView descriptionTV = new TextView(this);
 
         // size and position
         int buttonDimension =
-                Utilities.dpToPixels(mContext, getResources().getDimension(R.dimen.youtube_button_size));
+                Utilities.dpToPixels(mContext, getResources().getDimension(R.dimen.button));
         int marginStart =
                 Utilities.dpToPixels(mContext, getResources().getDimension(R.dimen.detail_spacing));
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams

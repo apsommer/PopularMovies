@@ -14,5 +14,9 @@
 
     <!-- miscellaneous -->
     <string name="content_description_for_poster_image">Movie poster image</string>
+    <string name="iv_star_content_description">Open or closed star icon indicates if this movie is a favorite, or not.</string>
+    <string name="popular_label">Popular</string>
+    <string name="top_rated_label">Top Rated</string>
+    <string name="favorites_label">Favorites</string>
 
 </resources>

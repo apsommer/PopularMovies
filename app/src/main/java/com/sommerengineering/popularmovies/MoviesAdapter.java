@@ -2,8 +2,8 @@ package com.sommerengineering.popularmovies;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,8 +92,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     }
 
+    @NonNull
     @Override
-    public MovieViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
 
         // inflate the grid_item layout
         Context context = viewGroup.getContext();
@@ -106,7 +107,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     }
 
     @Override
-    public void onBindViewHolder(MovieViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
 
 
         // check that movie objects actually exists

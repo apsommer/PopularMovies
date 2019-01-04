@@ -6,11 +6,11 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
-public class DetailViewModel extends AndroidViewModel {
+class DetailViewModel extends AndroidViewModel {
 
     // list of custom movies objects
-    private LiveData<List<Integer>> mFavoritesIds;
-    private FavoritesDatabase mDatabase;
+    private final LiveData<List<Integer>> mFavoritesIds;
+    private final FavoritesDatabase mDatabase;
 
     // constructor sets list of custom movie objects from database
     public DetailViewModel(Application application) {

@@ -6,13 +6,10 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
-public class MainViewModel extends AndroidViewModel {
+class MainViewModel extends AndroidViewModel {
 
     // list of custom movies objects
-    private LiveData<List<MovieObject>> mFavorites;
-
-    // flag for if the user is viewing the favorites list, handles configuration change
-    private boolean mIsViewingFavorites;
+    private final LiveData<List<MovieObject>> mFavorites;
 
     // constructor sets list of custom movie objects from database
     public MainViewModel(Application application) {
@@ -21,17 +18,9 @@ public class MainViewModel extends AndroidViewModel {
         mFavorites = database.favoritesDao().loadAllFavoriteMovies();
     }
 
-    // getters
+    // getter
     public LiveData<List<MovieObject>> getFavorites() {
         return mFavorites;
-    }
-    public boolean getIsViewingFavorites() {
-        return mIsViewingFavorites;
-    }
-
-    // setters
-    public void setIsViewingFavorites(boolean isViewingFavorites) {
-        mIsViewingFavorites = isViewingFavorites;
     }
 
 }

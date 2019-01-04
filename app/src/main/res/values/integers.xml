@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- grid item width defined in raw pixels for Utilities.calculateNumberOfColumns() -->
+    <integer name="grid_item">180</integer>
+
+</resources>

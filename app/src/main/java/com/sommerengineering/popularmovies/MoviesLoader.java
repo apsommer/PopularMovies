@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 // loads a list of movies and related metadata using an HTTP request on a background thread
+@SuppressWarnings("UnnecessaryLocalVariable")
 class MoviesLoader extends AsyncTaskLoader<ArrayList<MovieObject>> {
 
     // initialize member variable for URL address

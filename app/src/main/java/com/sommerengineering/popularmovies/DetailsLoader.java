@@ -2,7 +2,6 @@ package com.sommerengineering.popularmovies;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.net.Uri;
 import android.support.v4.util.Pair;
 
 import java.net.URL;

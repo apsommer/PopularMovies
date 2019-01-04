@@ -37,9 +37,7 @@ public class MainActivity extends AppCompatActivity implements
     private MoviesAdapter mAdapter;
     private RecyclerView mRecyclerGrid;
     private ProgressBar mProgressBar;
-    private TextView mErrorTextView;
     private Context mContext;
-    private GridLayoutManager mGridLayoutManager;
     private LoaderManager mLoaderManager;
     private LiveData<List<MovieObject>> mFavorites;
     private Observer<List<MovieObject>> mObserver;
@@ -60,10 +58,10 @@ public class MainActivity extends AppCompatActivity implements
 
         // get references to the indicator widgets
         mProgressBar = findViewById(R.id.pb_progress);
-        mErrorTextView = findViewById(R.id.tv_error);
+        TextView mErrorTextView = findViewById(R.id.tv_error);
 
         // associate the layout manager and adapter to the recycler view
-        mGridLayoutManager = new GridLayoutManager
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager
                 (this, Utilities.calculateNumberOfColumns(mContext));
         mRecyclerGrid.setLayoutManager(mGridLayoutManager);
 
