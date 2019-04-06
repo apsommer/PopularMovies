@@ -1,3 +1,4 @@
+## Popular Movies
 
 This is an Android application that discovers the most popular movies currently playing.
 
@@ -7,8 +8,20 @@ Knowledge of how to bring mobile experiences to life is a critical skill for And
 - Adapters and viewholders with custom layouts to populate a recycling grid
 - Third party libraries to simplify boilerplate code
 
-**API Key**
+### API Key
 
 This project requires an API key that has been removed in accordance with GitHub licensing requirements. Please visit the following site to obtain a free API key, and add it to the utility class file.
 
 https://www.themoviedb.org/account/signup
+
+#### Introduction grid on a phone in portrait orientation.
+#### ![](demo/phone_port.png)
+
+#### Movie details on a phone in portrait orientation.
+#### ![](demo/phone_port_detail.png)
+
+#### Introduction grid on a tablet in landscape orientation.
+#### ![](demo/tablet_land.png)
+
+#### Movie details on a tablet in landscape orientation.
+#### ![](demo/tablet_land_detail.png)

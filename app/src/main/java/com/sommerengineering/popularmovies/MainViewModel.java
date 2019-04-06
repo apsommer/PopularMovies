@@ -6,7 +6,7 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
-class MainViewModel extends AndroidViewModel {
+public class MainViewModel extends AndroidViewModel {
 
     // list of custom movies objects
     private final LiveData<List<MovieObject>> mFavorites;

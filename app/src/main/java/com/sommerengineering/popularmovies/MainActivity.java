@@ -53,14 +53,14 @@ public class MainActivity extends AppCompatActivity implements
         // get a reference for the top level context
         mContext = getApplicationContext();
 
-        // setup the recycler view and adapter
+        // setup the recycler view
         mRecyclerGrid = findViewById(R.id.rv_recycler);
 
         // get references to the indicator widgets
         mProgressBar = findViewById(R.id.pb_progress);
         TextView mErrorTextView = findViewById(R.id.tv_error);
 
-        // associate the layout manager and adapter to the recycler view
+        // associate the layout manager to the recycler view
         GridLayoutManager mGridLayoutManager = new GridLayoutManager
                 (this, Utilities.calculateNumberOfColumns(mContext));
         mRecyclerGrid.setLayoutManager(mGridLayoutManager);
